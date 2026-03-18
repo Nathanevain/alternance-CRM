@@ -1,0 +1,1309 @@
+{
+  "companies": [
+    {
+      "id": 1,
+      "name": "Qonto",
+      "website": "qonto.com",
+      "sector": "Fintech",
+      "stage": "Licorne",
+      "founded": "2016",
+      "employees": "1 200+",
+      "funding": "€626M",
+      "description": "Solution financière tout-en-un pour PME et indépendants européens. Leader en France, 500 000+ clients B2B.",
+      "hook": "Expérience comptabilité Figaro = fit direct avec leur produit finance B2B",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Alexandre Prot",
+          "role": "CEO & Co-fondateur",
+          "linkedin": ""
+        },
+        {
+          "name": "Steve Anavi",
+          "role": "COO & Co-fondateur",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "Cible #1. Chercher Head of Sales ou Sales Manager sur LinkedIn.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 2,
+      "name": "Revolut",
+      "website": "revolut.com",
+      "sector": "Fintech",
+      "stage": "Licorne",
+      "founded": "2015",
+      "employees": "8 000+",
+      "funding": "$45B valuation",
+      "description": "Super-app financière mondiale : compte courant, crypto, assurance, trading. 35M+ clients dans 35 pays.",
+      "hook": "Point commun : Ali Duman / Poitiers / Futuroscope",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Nikolay Storonsky",
+          "role": "CEO",
+          "linkedin": ""
+        },
+        {
+          "name": "Ali Duman",
+          "role": "Senior Sales Manager Paris",
+          "linkedin": " linkedin.com/in/aliduman62"
+        }
+      ],
+      "myContact": {
+        "name": "Ali Duman",
+        "role": "Senior Sales Manager",
+        "email": "",
+        "linkedin": "https://www.linkedin.com/in/aliduman62/"
+      },
+      "status": 6,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "2026-03-18",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "LinkedIn + email envoyés avec CV FR+EN. Relancer à J+7.",
+      "activityLog": [
+        {
+          "date": "2026-03-18",
+          "action": "Message LinkedIn envoyé — accroche Poitiers/Futuroscope",
+          "type": "linkedin"
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Email direct envoyé avec CV FR+EN",
+          "type": "email"
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Statut avancé → ⏳ En attente",
+          "type": "note"
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Statut avancé → 💬 Réponse",
+          "type": "note"
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Statut avancé → 🤝 Entretien",
+          "type": "note"
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Statut avancé → 🏆 Offre",
+          "type": "note"
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Statut → 💬 Réponse",
+          "type": "note"
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Statut → 💤 Sans réponse",
+          "type": "note"
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Statut → ❌ Refusé",
+          "type": "note"
+        }
+      ],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 101,
+      "name": "Sunday",
+      "website": "sundayapp.io",
+      "sector": "Hospitality Tech",
+      "stage": "Scale-up",
+      "founded": "2021",
+      "employees": "300+",
+      "funding": "€130M",
+      "description": "Paiement par QR code pour restaurants. Scan → payer → partir en 10 secondes. Ex-fondateurs de Square France.",
+      "hook": "FIT PARFAIT : QR code + restauration + BTS MHR + Jardins de Bakea + Ibis Styles",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Victor Lugger",
+          "role": "CEO & Co-fondateur",
+          "linkedin": ""
+        },
+        {
+          "name": "Tigrane Seydoux",
+          "role": "Co-fondateur",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "EVAIN",
+        "role": "Head of sales",
+        "email": "n.evuvadsvu@gmail.com",
+        "linkedin": "onc kéjecizejazlinkedin"
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "Cible PRIORITAIRE. Triple fit : produit paiement + expérience restauration terrain + BTS hôtellerie.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 3,
+      "name": "Spendesk",
+      "website": "spendesk.com",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "2016",
+      "employees": "400+",
+      "funding": "€115M",
+      "description": "Plateforme de gestion des dépenses et cartes virtuelles pour entreprises. Fort en Europe B2B.",
+      "hook": "Gestion dépenses B2B = lien direct avec gestion facturation Figaro",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Rodolphe Ardant",
+          "role": "CEO & Co-fondateur",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "Excellent fit cycle vente B2B complexe.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 4,
+      "name": "Pennylane",
+      "website": "pennylane.com",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "2020",
+      "employees": "350+",
+      "funding": "€100M",
+      "description": "Logiciel comptabilité et gestion financière pour TPE/PME et experts-comptables.",
+      "hook": "Produit comptabilité = expérience directe Figaro Apprenti Comptable",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Arthur Waller",
+          "role": "CEO & Co-fondateur",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "Fit comptabilité fort. Lien évident.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 114,
+      "name": "Agicap",
+      "website": "agicap.com",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "2017",
+      "employees": "600+",
+      "funding": "€130M",
+      "description": "Logiciel de gestion et prévision de trésorerie pour PME. Fort growth en Europe.",
+      "hook": "Trésorerie = cœur de métier Figaro (-20% délais, -50% relances)",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Sébastien Beyet",
+          "role": "CEO & Co-fondateur",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "FIT PARFAIT : expertise trésorerie Figaro. Cible prioritaire.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 303,
+      "name": "Pigment",
+      "website": "pigment.app",
+      "sector": "Scale-up Tech",
+      "stage": "Scale-up",
+      "founded": "2019",
+      "employees": "400+",
+      "funding": "€200M",
+      "description": "Plateforme FP&A nouvelle génération. Remplace Excel pour la planification financière d'entreprise.",
+      "hook": "Produit Finance + Excel avancé (XLOOKUP) = double compétence valorisée",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Eléonore Crespo",
+          "role": "CEO & Co-fondatrice",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "Fit fort : Finance + Business + Excel.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 5,
+      "name": "Lydia / Sumeria",
+      "website": "sumeria.fr",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "2013",
+      "employees": "200+",
+      "funding": "€131M",
+      "description": "Néo-banque française. Pionnier du paiement mobile en France.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Cyril Chiche",
+          "role": "CEO",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 6,
+      "name": "Swile",
+      "website": "swile.co",
+      "sector": "Fintech",
+      "stage": "Licorne",
+      "founded": "2018",
+      "employees": "700+",
+      "funding": "€175M",
+      "description": "Super-app employee benefits : titres-restaurant, avantages salariés. Présent en France et au Brésil.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Loïc Soubeyrand",
+          "role": "CEO & Fondateur",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 7,
+      "name": "Alan",
+      "website": "alan.com",
+      "sector": "Fintech",
+      "stage": "Licorne",
+      "founded": "2016",
+      "employees": "600+",
+      "funding": "€220M",
+      "description": "Assurance santé digitale pour entreprises. Modèle SaaS B2B disruptif.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Jean-Charles Samuelian",
+          "role": "CEO",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 9,
+      "name": "Payfit",
+      "website": "payfit.com",
+      "sector": "Fintech",
+      "stage": "Licorne",
+      "founded": "2015",
+      "employees": "800+",
+      "funding": "€283M",
+      "description": "Logiciel de gestion de la paie et RH pour PME.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Firmin Zocchetto",
+          "role": "CEO",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 102,
+      "name": "Alma",
+      "website": "getalma.eu",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "2018",
+      "employees": "300+",
+      "funding": "€130M",
+      "description": "BNPL B2B pour e-commerce et commerce physique. Leader du paiement fractionné en France.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Louis Chatriot",
+          "role": "CEO & Co-fondateur",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "French Tech 120. Leader BNPL B2B.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 104,
+      "name": "Mangopay",
+      "website": "mangopay.com",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "2013",
+      "employees": "400+",
+      "funding": "€75M",
+      "description": "Plateforme de paiement pour marketplaces et plateformes de financement.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Romain Mazeries",
+          "role": "CEO",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "French Tech 120.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 105,
+      "name": "October",
+      "website": "fr.october.eu",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "2014",
+      "employees": "200+",
+      "funding": "€70M",
+      "description": "Prêt en ligne aux PME européennes. Financement alternatif et crowdlending.",
+      "hook": "Expertise Finance + compréhension des bilans",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Olivier Goy",
+          "role": "CEO & Fondateur",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 107,
+      "name": "Silvr",
+      "website": "silvr.co",
+      "sector": "Fintech",
+      "stage": "Startup",
+      "founded": "2020",
+      "employees": "80+",
+      "funding": "€120M",
+      "description": "Revenue-based financing pour e-commerçants basé sur leurs données revenus.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "French Tech 120. Modèle disruptif.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 108,
+      "name": "Memo Bank",
+      "website": "memo.bank",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "2017",
+      "employees": "150+",
+      "funding": "€30M",
+      "description": "Banque d'affaires pour PME françaises. Vraie licence bancaire.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 112,
+      "name": "Fintecture",
+      "website": "fintecture.com",
+      "sector": "Fintech",
+      "stage": "Startup",
+      "founded": "2019",
+      "employees": "80+",
+      "funding": "€25M",
+      "description": "Open banking payments — virement bancaire instantané sans intermédiaire.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "French Tech 120. Open banking montant.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 115,
+      "name": "Sidetrade",
+      "website": "sidetrade.com",
+      "sector": "Fintech",
+      "stage": "Grand Groupe",
+      "founded": "2000",
+      "employees": "300+",
+      "funding": "Coté Euronext",
+      "description": "IA pour l'automatisation du cash collection B2B. Optimise les créances clients.",
+      "hook": "-50% relances fournisseurs au Figaro = argument direct pour leur produit",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "FIT très fort : gestion relances Figaro.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 11,
+      "name": "Zenchef",
+      "website": "zenchef.com",
+      "sector": "Hospitality Tech",
+      "stage": "Scale-up",
+      "founded": "2010",
+      "employees": "300+",
+      "funding": "€50M",
+      "description": "Logiciel de réservation et gestion de restaurant. SaaS B2B pour 15 000+ restaurants.",
+      "hook": "BTS MHR + Jardins de Bakea = crédibilité terrain immédiate",
+      "marketType": "hidden",
+      "keyPeople": [
+        {
+          "name": "Victor Lugger",
+          "role": "CEO",
+          "linkedin": ""
+        }
+      ],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 12,
+      "name": "Skello",
+      "website": "skello.io",
+      "sector": "Hospitality Tech",
+      "stage": "Scale-up",
+      "founded": "2016",
+      "employees": "200+",
+      "funding": "€40M",
+      "description": "Logiciel de planification des plannings pour restauration, hôtellerie et retail.",
+      "hook": "BTS MHR + expérience restauration",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 201,
+      "name": "Innovorder",
+      "website": "innovorder.com",
+      "sector": "Hospitality Tech",
+      "stage": "Scale-up",
+      "founded": "2011",
+      "employees": "150+",
+      "funding": "€12M",
+      "description": "Solutions de commande digitale et kiosques pour la restauration rapide et collective.",
+      "hook": "BTS MHR + Ibis Styles + Jardins de Bakea = crédibilité restauration",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "high",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "Fit restauration + tech. Valoriser parcours hôtellerie.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 202,
+      "name": "Zelty",
+      "website": "zelty.fr",
+      "sector": "Hospitality Tech",
+      "stage": "PME",
+      "founded": "2013",
+      "employees": "50+",
+      "funding": "€5M",
+      "description": "Caisse enregistreuse cloud pour restaurants.",
+      "hook": "Expérience terrain restauration",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 10,
+      "name": "Aircall",
+      "website": "aircall.io",
+      "sector": "Scale-up Tech",
+      "stage": "Licorne",
+      "founded": "2014",
+      "employees": "700+",
+      "funding": "€220M",
+      "description": "Plateforme téléphonie cloud pour équipes Sales et Support.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "low",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 302,
+      "name": "Partoo",
+      "website": "partoo.co",
+      "sector": "Scale-up Tech",
+      "stage": "Scale-up",
+      "founded": "2014",
+      "employees": "400+",
+      "funding": "€110M",
+      "description": "Plateforme de gestion de la présence locale pour enseignes multi-sites.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "French Tech 120. Équipe Sales forte.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 301,
+      "name": "Contentsquare",
+      "website": "contentsquare.com",
+      "sector": "Scale-up Tech",
+      "stage": "Licorne",
+      "founded": "2012",
+      "employees": "2 000+",
+      "funding": "$1.4B",
+      "description": "Plateforme d'analytics d'expérience digitale.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "low",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "French Tech 120.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 14,
+      "name": "Fraîcheur de Paris",
+      "website": "fraicheurparis.fr",
+      "sector": "Greentech / Industrie",
+      "stage": "Grand Groupe",
+      "founded": "1991",
+      "employees": "150+",
+      "funding": "DSP publique",
+      "description": "Réseau de froid urbain de Paris par l'eau de Seine. Délégation de service public.",
+      "hook": "Contact indirect via pote — sa sœur y travaille",
+      "marketType": "alumni",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "Contact via réseau. Ingénierie d'affaires complexe. Bon pour le CV.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 15,
+      "name": "BPI France",
+      "website": "bpifrance.fr",
+      "sector": "Para-public",
+      "stage": "Grand Groupe",
+      "founded": "2012",
+      "employees": "3 500+",
+      "funding": "Public",
+      "description": "Banque publique d'investissement. Finance startups, PME et ETI françaises.",
+      "hook": "",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "low",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "Para-public. Analyser des dossiers Fintech.",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:20:54.548Z"
+    },
+    {
+      "id": 1773869020189,
+      "name": "FIGARO",
+      "website": "",
+      "sector": "Fintech",
+      "stage": "Scale-up",
+      "founded": "",
+      "employees": "",
+      "funding": "",
+      "description": "",
+      "hook": "deja dedans",
+      "marketType": "hidden",
+      "keyPeople": [],
+      "myContact": {
+        "name": "",
+        "role": "",
+        "email": "",
+        "linkedin": ""
+      },
+      "status": 0,
+      "priority": "medium",
+      "channel": "linkedin",
+      "date": "",
+      "followUpDate": "",
+      "nextAction": "",
+      "nextActionDate": "",
+      "notes": "",
+      "activityLog": [],
+      "interviewPrep": {
+        "pitch": "",
+        "questions": [
+          "",
+          "",
+          ""
+        ],
+        "keyFacts": "",
+        "interviewDate": ""
+      },
+      "createdAt": "2026-03-18T21:23:30.319Z"
+    }
+  ],
+  "contacts": [
+    {
+      "id": 1773869236519,
+      "name": "Nathan EVAIN",
+      "role": "Head of Sales",
+      "companyName": "Figaro",
+      "email": "Nevan@gmail.com",
+      "linkedin": "nzijéiénd",
+      "phone": "0761457108",
+      "status": "à contacter",
+      "followUpDate": "",
+      "notes": "édoj\"ébdoéb\"doé\""
+    }
+  ],
+  "checkedItems": [],
+  "templates": [
+    {
+      "title": "LinkedIn 1er contact",
+      "text": "Bonjour [Prénom],\n\nJe suis tombé sur votre profil en recherchant des parcours en [Secteur] à Paris.\n\n[Point commun spécifique — ex: votre passage chez [Ancienne boîte] / votre transition vers [Rôle]] a particulièrement retenu mon attention.\n\nÉtant moi-même poitevin fraîchement arrivé à Paris pour intégrer l'écosystème [Secteur], je serais curieux de connaître votre ressenti : comment avez-vous abordé ce pivot vers le [Métier] ?\n\nAu plaisir d'échanger si vous avez un moment,\nNathan"
+    },
+    {
+      "title": "Email follow-up (J+7)",
+      "text": "Objet : Suite à mon message LinkedIn — Nathan Evain (Alternance Sept. 2026)\n\nBonjour [Prénom],\n\nJe fais suite à mon message LinkedIn qui a sans doute été noyé sous vos notifications.\n\nJe vais droit au but : je recherche activement une alternance en Business Development / Ingénierie d'Affaires en Fintech pour septembre 2026.\n\nVous trouverez ci-joint mon CV (FR + EN). Je serais très motivé à l'idée d'échanger 10 minutes selon vos disponibilités.\n\nBien à vous,\nNathan Evain — 07 61 45 71 08 — nathanevain86@gmail.com"
+    },
+    {
+      "title": "Email direct (alternance)",
+      "text": "Objet : De Poitiers à la Fintech | Nathan Evain (Alternance Septembre 2026)\n\nBonjour [Prénom],\n\nJe fais suite à mon message LinkedIn. Étant moi-même poitevin et futur diplômé en Ingénierie d'Affaires & Fintech, votre trajectoire chez [Entreprise] a retenu mon attention.\n\nJe vais droit au but : je recherche activement une alternance en Fintech Sales pour septembre 2026.\n\nQuelques éléments concrets :\n• -20% délais de traitement au Groupe Le Figaro (optimisation process)\n• Portefeuille virtuel €100K géré avec +12% de performance\n• Fondateur de Glass Fragments — cycle B2B/B2C complet\n\nCV ci-joint (FR + EN). Seriez-vous ouvert à 10 min d'échange ?\n\nNathan Evain — 07 61 45 71 08"
+    },
+    {
+      "title": "Réponse après call",
+      "text": "Objet : Merci pour notre échange — Nathan Evain\n\nBonjour [Prénom],\n\nMerci pour ces [durée] minutes d'échange très enrichissantes.\n\nVotre retour sur [point évoqué] a particulièrement résonné avec mon projet : [lien avec ton parcours].\n\nPour résumer ma valeur ajoutée :\n• [Point fort 1 en lien avec leur besoin]\n• [Point fort 2]\n\nJe reste à votre disposition pour la suite du processus.\n\nBien à vous,\nNathan Evain"
+    }
+  ],
+  "exportedAt": "2026-03-18T21:52:42.512Z"
+}
