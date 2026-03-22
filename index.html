@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlternancePRO v4 — Nathan Evain</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== DARK THEME ===== */
+:root{
+  --bg0:#060b12;--bg1:#0a1120;--bg2:#0e1a2e;--bg3:#132038;
+  --border:#1a2d47;--border2:#243d5a;
+  --blue:#1e6fff;--cyan:#00c8ff;--green:#00e676;--yellow:#ffc400;
+  --orange:#ff6d00;--red:#ff3d3d;--purple:#b388ff;
+  --text:#ddeeff;--muted:#4a6880;--muted2:#2d4a66;
+  --card:#0c1825;--shadow:rgba(0,0,0,.4);
+  --header-bg:linear-gradient(90deg,#060b12,#0a1825);
+  --font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+/* ===== LIGHT THEME ===== */
+[data-theme="light"]{
+  --bg0:#f0f4f8;--bg1:#ffffff;--bg2:#f5f8fc;--bg3:#eaeff6;
+  --border:#d0dbe8;--border2:#b8c9da;
+  --blue:#1455c0;--cyan:#0088b3;--green:#007a3d;--yellow:#a06000;
+  --orange:#c04a00;--red:#c02828;--purple:#6228c8;
+  --text:#0d1d2e;--muted:#5a7490;--muted2:#8ca5bc;
+  --card:#ffffff;--shadow:rgba(0,30,60,.12);
+  --header-bg:linear-gradient(90deg,#ffffff,#f0f6ff);
+}
+[data-theme="light"] #header{box-shadow:0 1px 8px var(--shadow);}
+[data-theme="light"] .modal{box-shadow:0 8px 40px var(--shadow);}
+[data-theme="light"] .ent-card:hover,[data-theme="light"] .pl-card:hover{box-shadow:0 4px 18px var(--shadow);}
+
+/* ===== RESET & BASE — scrolling naturel ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{height:100%;}
+body{
+  font-family:var(--font);background:var(--bg0);color:var(--text);
+  display:flex;flex-direction:column;min-height:100%;
+  transition:background .25s,color .25s;
+  overflow-x:hidden; /* horizontal scroll géré par les sous-éléments */
+}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* ===== HEADER — sticky ===== */
+#header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;height:52px;min-height:52px;
+  background:var(--header-bg);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;gap:12px;
+}
+.logo{font-size:15px;font-weight:800;letter-spacing:-0.5px;white-space:nowrap;}
+.logo em{color:var(--cyan);font-style:normal;}
+
+/* DEADLINE — éditable */
+#deadline-counter{
+  display:flex;align-items:center;gap:6px;padding:4px 10px;
+  border-radius:8px;border:1px solid;font-family:var(--mono);
+  font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0;cursor:pointer;
+  transition:opacity .15s;
+}
+#deadline-counter:hover{opacity:.8;}
+#deadline-date-input{
+  background:transparent;border:none;outline:none;font-family:var(--mono);
+  font-size:12px;font-weight:700;color:inherit;width:110px;cursor:pointer;
+  color-scheme:dark;
+}
+[data-theme="light"] #deadline-date-input{color-scheme:light;}
+
+.hstats{display:flex;gap:16px;flex-shrink:0;}
+.hs{text-align:center;}
+.hs-n{font-size:17px;font-weight:700;color:var(--cyan);font-family:var(--mono);}
+.hs-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
+.hbtns{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.hbtn{padding:6px 12px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);transition:all .15s;white-space:nowrap;}
+.hbtn-pri{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;}
+.hbtn-pri:hover{opacity:.85;}
+.hbtn-sec{background:var(--bg3);color:var(--text);border:1px solid var(--border2);}
+.hbtn-sec:hover{border-color:var(--cyan);color:var(--cyan);}
+.hbtn-warn{background:transparent;color:var(--yellow);border:1px solid var(--yellow);}
+.hbtn-warn:hover{background:var(--yellow);color:#000;}
+.theme-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.theme-btn:hover{border-color:var(--cyan);}
+#search-input{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--text);font-family:var(--font);font-size:12px;width:160px;outline:none;transition:border-color .2s;}
+#search-input:focus{border-color:var(--cyan);}
+#search-input::placeholder{color:var(--muted);}
+/* Panneau résultats recherche */
+#search-panel{
+  position:absolute;top:52px;right:16px;width:340px;
+  background:var(--bg1);border:1px solid var(--border2);border-radius:10px;
+  box-shadow:0 8px 32px var(--shadow);z-index:200;
+  display:none;overflow:hidden;
+  max-height:420px;overflow-y:auto;
+}
+.search-result-item{
+  padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);
+  transition:background .1s;
+}
+.search-result-item:last-child{border-bottom:none;}
+.search-result-item:hover{background:var(--bg2);}
+
+/* ===== NAV — sticky sous le header ===== */
+#nav{
+  display:flex;align-items:center;gap:2px;padding:0 12px;
+  height:40px;min-height:40px;background:var(--bg1);
+  border-bottom:1px solid var(--border);overflow-x:auto;
+  position:sticky;top:52px;z-index:99;
+}
+.nav-btn{padding:6px 12px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;color:var(--muted);background:transparent;border:none;font-family:var(--font);transition:all .15s;white-space:nowrap;}
+.nav-btn.active{color:var(--cyan);background:var(--bg2);}
+.nav-btn:hover:not(.active){color:var(--text);}
+
+/* ===== MAIN & VIEWS — scroll naturel ===== */
+#main{flex:1;}
+.view{display:none;padding:14px 16px;}
+.view.active{display:block;}
+
+/* ===== PIPELINE VIEW — full-axis scroll ===== */
+/* La vue pipeline occupe toute la hauteur restante après header+nav (52+40=92px)
+   Elle ne scrolle pas verticalement — c'est un conteneur fixe.
+   Le scroll horizontal est persistant et toujours visible en bas du viewport. */
+#view-pipeline{
+  display:none;
+  flex-direction:column;
+  height:calc(100vh - 92px);
+  overflow:hidden;          /* pas de scroll sur la vue elle-même */
+  padding:14px 16px 0 16px;
+}
+#view-pipeline.active{display:flex;}
+
+/* Zone sandbox scrollable verticalement si beaucoup d'items */
+#sandbox-section{flex-shrink:0;max-height:160px;overflow-y:auto;}
+
+/* Le board prend tout l'espace restant et scroll horizontalement */
+#pipeline-board-wrap{
+  flex:1;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:12px; /* espace pour la scrollbar */
+}
+
+/* Scrollbar horizontale toujours visible et épaisse */
+#pipeline-board-wrap::-webkit-scrollbar{height:8px;}
+#pipeline-board-wrap::-webkit-scrollbar-track{background:var(--bg2);border-radius:4px;}
+#pipeline-board-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+#pipeline-board-wrap::-webkit-scrollbar-thumb:hover{background:var(--cyan);}
+
+/* Scroll horizontal à la molette sur le board */
+#pipeline-board{
+  display:flex;gap:10px;
+  height:100%;              /* prend toute la hauteur du wrap */
+  min-width:max-content;    /* force la largeur totale des colonnes */
+  padding-bottom:4px;
+}
+
+/* Colonnes : hauteur fixe avec scroll vertical interne */
+.pl-col{
+  min-width:220px;max-width:220px;
+  background:var(--bg1);border:1px solid var(--border);border-radius:10px;
+  display:flex;flex-direction:column;
+  height:100%;overflow:hidden;
+  transition:border-color .15s;
+}
+.pl-body{
+  padding:8px;display:flex;flex-direction:column;gap:6px;
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  min-height:0; /* important pour que flex+overflow fonctionne */
+}
+.pl-body::-webkit-scrollbar{width:3px;}
+.pl-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* ===== DASHBOARD ===== */
+.dash-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px;}
+.dash-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;position:relative;overflow:hidden;}
+.dash-card::after{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--dc-color,var(--cyan));}
+.dc-val{font-size:26px;font-weight:800;font-family:var(--mono);color:var(--dc-color,var(--cyan));}
+.dc-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;}
+.dc-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+.dash-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.dash-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.section-title span{display:block;height:1px;flex:1;background:var(--border);}
+.funnel-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.funnel-label{font-size:11px;color:var(--muted);width:120px;text-align:right;}
+.funnel-bar-wrap{flex:1;height:18px;background:var(--bg3);border-radius:4px;overflow:hidden;}
+.funnel-bar{height:100%;border-radius:4px;transition:width .5s ease;display:flex;align-items:center;padding-left:6px;}
+.funnel-bar span{font-size:10px;font-weight:600;color:#fff;font-family:var(--mono);}
+.funnel-count{font-size:11px;font-family:var(--mono);color:var(--text);width:24px;}
+.alert-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.ai-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+/* ===== ACTIVITÉ RÉCENTE scrollable ===== */
+.act-scroll{
+  max-height:220px;overflow-y:auto;
+  border-radius:6px;
+}
+.act-scroll::-webkit-scrollbar{width:3px;}
+.act-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.act-see-all{
+  display:block;width:100%;margin-top:8px;
+  padding:6px;border-radius:6px;font-size:11px;font-weight:600;
+  border:1px solid var(--border);background:transparent;color:var(--muted);
+  cursor:pointer;font-family:var(--font);text-align:center;transition:all .12s;
+}
+.act-see-all:hover{color:var(--cyan);border-color:var(--cyan);}
+/* Modal historique */
+#history-modal .modal{width:700px;}
+.history-log{display:flex;flex-direction:column;gap:3px;max-height:60vh;overflow-y:auto;}
+.history-filter{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.hfilt-btn{padding:3px 10px;border-radius:5px;font-size:11px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--font);transition:all .12s;}
+.hfilt-btn.active{background:var(--bg3);color:var(--text);border-color:var(--border2);}
+.pb-wrap{margin-bottom:10px;}
+.pb-header{display:flex;justify-content:space-between;margin-bottom:3px;font-size:11px;}
+.pb-label{color:var(--muted);}
+.pb-val{color:var(--text);font-family:var(--mono);}
+.pb{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.pb-fill{height:100%;border-radius:3px;transition:width .5s ease;}
+.top3-list{display:flex;flex-direction:column;gap:6px;}
+.top3-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:space-between;}
+.top3-item:hover{border-color:var(--cyan);}
+.top3-rank{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;}
+.top3-name{font-size:13px;font-weight:700;margin-left:8px;}
+.top3-reason{font-size:10px;color:var(--muted);margin-top:2px;}
+.top3-score{font-family:var(--mono);font-size:12px;color:var(--cyan);font-weight:700;}
+.agenda-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.agenda-day{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;}
+.agenda-day-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;}
+.agenda-day.today{border-color:var(--cyan);}
+.agenda-day.today .agenda-day-title{color:var(--cyan);}
+.agenda-task{font-size:11px;padding:4px 6px;border-radius:4px;margin-bottom:3px;cursor:pointer;line-height:1.4;}
+.agenda-empty{font-size:11px;color:var(--muted2);}
+
+/* ===== PIPELINE ===== */
+/* Sandbox / Bac à sable */
+.sandbox-section{margin-bottom:16px;padding:12px;background:rgba(255,109,0,.06);border:1px dashed var(--orange);border-radius:10px;}
+.sandbox-title{font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.sandbox-grid{display:flex;gap:8px;flex-wrap:wrap;}
+.sandbox-card{background:var(--bg2);border:1px solid var(--orange);border-radius:8px;padding:10px 12px;min-width:160px;position:relative;}
+.sandbox-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.sandbox-sector{font-size:10px;color:var(--muted);}
+.sandbox-hook{font-size:10px;color:var(--orange);font-style:italic;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sandbox-actions{display:flex;gap:4px;margin-top:8px;}
+.sandbox-btn{font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid;cursor:pointer;font-family:var(--font);transition:all .12s;}
+.sandbox-btn-complete{border-color:var(--cyan);color:var(--cyan);background:transparent;}
+.sandbox-btn-complete:hover{background:var(--cyan);color:#000;}
+.sandbox-btn-del{border-color:var(--red);color:var(--red);background:transparent;}
+.sandbox-btn-del:hover{background:var(--red);color:#fff;}
+
+.pl-col.drag-over{border-color:var(--cyan);background:rgba(0,200,255,.04);}
+.pl-col-head{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--bg2);border-radius:10px 10px 0 0;flex-shrink:0;}
+.pl-col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+.pl-count{font-size:10px;background:var(--bg3);border:1px solid var(--border);padding:1px 7px;border-radius:10px;color:var(--muted);font-family:var(--mono);}
+/* Carte Pipeline — nom centré pour À contacter, non coupé */
+.pl-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:10px 10px 10px 13px;cursor:grab;
+  transition:all .15s;position:relative;overflow:hidden;
+}
+.pl-card:active{cursor:grabbing;}
+.pl-card::before{content:'';position:absolute;left:0;top:0;width:3px;height:100%;background:var(--cc,var(--cyan));}
+.pl-card:hover{border-color:var(--cc,var(--cyan));transform:translateY(-1px);}
+.pl-card.dragging{opacity:.5;transform:rotate(1deg);}
+/* Nom complet, pas coupé */
+.pl-cn{
+  font-size:12px;font-weight:700;margin-bottom:2px;
+  word-break:break-word;white-space:normal;line-height:1.3;
+}
+/* Centrage dans la colonne 0 */
+.pl-col-0 .pl-card{text-align:center;padding-left:10px;}
+.pl-col-0 .pl-card::before{display:none;}
+.pl-col-0 .pl-meta{justify-content:center;}
+.pl-sec{font-size:10px;color:var(--muted);}
+.pl-next{font-size:10px;color:var(--yellow);margin-top:4px;display:flex;align-items:center;gap:3px;}
+/* Badge relance J+7 */
+.pl-relance{font-size:10px;background:rgba(255,61,61,.15);color:var(--red);border:1px solid rgba(255,61,61,.3);border-radius:4px;padding:2px 5px;margin-top:4px;display:inline-block;}
+.pl-meta{display:flex;align-items:center;justify-content:space-between;margin-top:5px;}
+.pl-date{font-size:10px;color:var(--muted);font-family:var(--mono);}
+.pl-actions{display:flex;gap:3px;margin-top:6px;opacity:0;transition:opacity .15s;}
+.pl-card:hover .pl-actions{opacity:1;}
+.pl-btn{font-size:10px;padding:2px 6px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--muted);cursor:pointer;font-family:var(--font);transition:all .12s;}
+.pl-btn:hover{color:var(--cyan);border-color:var(--cyan);}
+.pl-btn.back:hover{color:var(--orange);border-color:var(--orange);}
+.pl-btn.del:hover{color:var(--red);border-color:var(--red);}
+.pl-empty{text-align:center;padding:16px 8px;color:var(--muted);font-size:11px;}
+
+/* ===== ENTREPRISES ===== */
+.ent-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.sector-tabs{display:flex;gap:5px;flex-wrap:wrap;}
+.stab{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;font-family:var(--font);transition:all .15s;}
+.stab.active{background:var(--cyan);color:#000;border-color:var(--cyan);}
+.stab:hover:not(.active){color:var(--text);border-color:var(--border2);}
+.ent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:10px;}
+.ent-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:13px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.ent-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--ec,var(--blue));}
+.ent-card:hover{border-color:var(--ec,var(--blue));transform:translateY(-2px);}
+.ec-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;}
+.ec-name{font-size:14px;font-weight:800;}
+.ec-badge{font-size:9px;padding:2px 6px;border-radius:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.ec-score{font-family:var(--mono);font-size:10px;color:var(--cyan);background:rgba(0,200,255,.1);padding:2px 6px;border-radius:4px;margin-bottom:5px;}
+.ec-hook{font-size:10px;color:var(--orange);font-style:italic;margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ec-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ec-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.ec-stat{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px;}
+.ec-stat strong{color:var(--text);font-family:var(--mono);}
+.ec-next{font-size:10px;color:var(--yellow);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ec-foot{display:flex;align-items:center;justify-content:space-between;}
+.ec-status{font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid;}
+
+/* ===== CONTACTS ===== */
+.ct-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.ct-search{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px 12px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;}
+.ct-search:focus{border-color:var(--cyan);}
+.ct-table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{background:var(--bg2);padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:9px 12px;font-size:12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:hover td{background:var(--bg2);}
+tr:last-child td{border-bottom:none;}
+.tbl-btn{font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--muted);cursor:pointer;font-family:var(--font);transition:all .12s;margin-right:3px;}
+.tbl-btn:hover{color:var(--cyan);border-color:var(--cyan);}
+.tbl-btn.del:hover{color:var(--red);border-color:var(--red);}
+
+/* ===== ANALYTICS ===== */
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;}
+.ana-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.ana-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:12px;}
+.kpi-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.kpi-row:last-child{border-bottom:none;}
+.kpi-label{color:var(--muted);}
+.kpi-val{font-family:var(--mono);font-weight:700;}
+
+/* ===== STRATEGIE ===== */
+.strat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.strat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.strat-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--cyan);margin-bottom:12px;}
+.strat-step{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start;}
+.snum{min-width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;}
+.stxt{font-size:12px;line-height:1.5;}
+.ssub{font-size:11px;color:var(--muted);margin-top:1px;}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.rule-box{background:var(--bg3);border-radius:8px;padding:10px;border:1px solid var(--border);}
+.rule-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.rule-item{font-size:11px;color:var(--muted);line-height:1.7;display:flex;gap:5px;align-items:flex-start;}
+.rule-item::before{content:'•';color:var(--muted2);flex-shrink:0;}
+.tmpl-tabs{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;}
+.ttab{padding:3px 10px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;font-family:var(--font);transition:all .12s;}
+.ttab.active{background:var(--bg3);color:var(--text);border-color:var(--border2);}
+.tmpl-content{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;line-height:1.7;color:var(--text);}
+.tmpl-edit-area{width:100%;background:var(--bg3);border:1px solid var(--cyan);border-radius:8px;padding:12px;font-size:12px;line-height:1.7;color:var(--text);font-family:var(--font);resize:vertical;min-height:160px;outline:none;}
+.tmpl-actions{display:flex;gap:6px;margin-top:8px;align-items:center;flex-wrap:wrap;}
+.tmpl-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid;cursor:pointer;font-family:var(--font);transition:all .12s;}
+.tmpl-btn-copy{border-color:var(--border2);background:var(--bg3);color:var(--muted);}
+.tmpl-btn-copy:hover{color:var(--cyan);border-color:var(--cyan);}
+.tmpl-btn-edit{border-color:var(--border2);background:var(--bg3);color:var(--muted);}
+.tmpl-btn-edit:hover{color:var(--yellow);border-color:var(--yellow);}
+.tmpl-btn-save{border-color:var(--green);background:transparent;color:var(--green);}
+.tmpl-btn-save:hover{background:var(--green);color:#000;}
+.tmpl-btn-cancel{border-color:var(--border);background:transparent;color:var(--muted);}
+.cl-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.cl-item:last-child{border-bottom:none;}
+.cl-box{width:15px;height:15px;border:1px solid var(--border2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.cl-box.done{background:var(--green);border-color:var(--green);}
+.cl-box.done::after{content:'✓';font-size:9px;color:#000;font-weight:700;}
+.cl-txt{font-size:12px;transition:all .15s;}
+.cl-txt.done{text-decoration:line-through;color:var(--muted);}
+.cl-tag{font-size:9px;padding:1px 5px;border-radius:10px;margin-left:auto;font-weight:600;}
+.tip-list{display:flex;flex-direction:column;gap:5px;}
+.tip-item{background:var(--bg3);border-radius:7px;padding:8px 10px;border-left:3px solid var(--yellow);font-size:11px;line-height:1.5;}
+.tip-item strong{color:var(--yellow);}
+.tip-item.good{border-left-color:var(--green);}
+.tip-item.good strong{color:var(--green);}
+.tip-item.bad{border-left-color:var(--red);}
+.tip-item.bad strong{color:var(--red);}
+
+/* ===== MODALS ===== */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--bg1);border:1px solid var(--border2);border-radius:14px;width:540px;max-width:96vw;max-height:90vh;overflow-y:auto;transform:translateY(16px);transition:transform .2s,background .25s;}
+.overlay.open .modal{transform:translateY(0);}
+.modal.wide{width:860px;}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg1);border-radius:14px 14px 0 0;z-index:5;}
+.modal-title{font-size:16px;font-weight:800;}
+.modal-close{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);transition:all .12s;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:18px 20px;}
+.modal-tabs{display:flex;gap:4px;padding:0 20px;border-bottom:1px solid var(--border);}
+.mtab{padding:8px 12px;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);border:none;background:transparent;font-family:var(--font);transition:all .12s;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.mtab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.frow-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.field{margin-bottom:10px;}
+.field label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:4px;}
+.field input,.field select,.field textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;transition:border-color .15s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--cyan);}
+.field select option{background:var(--bg2);}
+.field textarea{resize:vertical;min-height:64px;line-height:1.5;}
+.field input[type="date"]{color-scheme:dark;}
+[data-theme="light"] .field input[type="date"]{color-scheme:light;}
+.modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--bg1);border-radius:0 0 14px 14px;}
+.btn-cancel{padding:7px 14px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font);}
+.btn-cancel:hover{color:var(--text);}
+.btn-save{padding:7px 18px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);}
+.btn-save:hover{opacity:.88;}
+.det-section{margin-bottom:16px;}
+.det-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.det-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.det-field{background:var(--bg2);border-radius:7px;padding:9px 11px;}
+.df-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:3px;}
+.df-val{font-size:13px;color:var(--text);}
+.df-val.mono{font-family:var(--mono);}
+.df-val a{color:var(--cyan);text-decoration:none;}
+.df-val a:hover{text-decoration:underline;}
+.people-list{display:flex;flex-direction:column;gap:5px;}
+.person-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:flex-start;gap:9px;}
+.person-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;margin-top:2px;}
+.person-name{font-size:13px;font-weight:600;}
+.person-role{font-size:11px;color:var(--muted);}
+.person-contact{font-size:11px;color:var(--muted);margin-top:2px;display:flex;gap:10px;flex-wrap:wrap;}
+.person-contact a{color:var(--cyan);text-decoration:none;}
+.person-contact a:hover{text-decoration:underline;}
+.status-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;}
+.st-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:11px;cursor:pointer;font-family:var(--font);transition:all .12s;}
+.st-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+.activity-log{display:flex;flex-direction:column;gap:3px;max-height:150px;overflow-y:auto;}
+.alog-item{display:flex;gap:7px;font-size:11px;padding:4px 0;border-bottom:1px solid var(--border);}
+.alog-item:last-child{border-bottom:none;}
+.alog-date{color:var(--muted);font-family:var(--mono);white-space:nowrap;min-width:58px;}
+.alog-action{color:var(--text);flex:1;}
+.alog-type{font-size:10px;padding:1px 4px;border-radius:3px;font-weight:600;white-space:nowrap;}
+.add-log-row{display:flex;gap:5px;margin-top:7px;align-items:center;flex-wrap:wrap;}
+.log-date-input{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 7px;color:var(--text);font-family:var(--font);font-size:11px;outline:none;width:120px;color-scheme:dark;}
+[data-theme="light"] .log-date-input{color-scheme:light;}
+.log-date-input:focus{border-color:var(--cyan);}
+.add-log-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 9px;color:var(--text);font-family:var(--font);font-size:11px;outline:none;min-width:100px;}
+.add-log-input:focus{border-color:var(--cyan);}
+.add-log-btn{padding:5px 10px;border-radius:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-size:11px;cursor:pointer;font-family:var(--font);}
+.add-log-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+.notes-editable{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:9px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;resize:vertical;min-height:72px;line-height:1.6;}
+.notes-editable:focus{border-color:var(--cyan);}
+.sbadge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:600;border:1px solid;}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;}
+.badge-fintech{background:rgba(0,200,255,.12);color:var(--cyan);border:1px solid rgba(0,200,255,.2);}
+.badge-tech{background:rgba(30,111,255,.12);color:var(--blue);border:1px solid rgba(30,111,255,.2);}
+.badge-hosp{background:rgba(255,196,0,.12);color:var(--yellow);border:1px solid rgba(255,196,0,.2);}
+.badge-green{background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.2);}
+.badge-luxe{background:rgba(179,136,255,.12);color:var(--purple);border:1px solid rgba(179,136,255,.2);}
+.badge-pub{background:rgba(255,109,0,.12);color:var(--orange);border:1px solid rgba(255,109,0,.2);}
+.badge-saas{background:rgba(255,61,61,.12);color:var(--red);border:1px solid rgba(255,61,61,.2);}
+#dup-warning{display:none;padding:7px 10px;background:rgba(255,196,0,.1);border:1px solid var(--yellow);border-radius:7px;font-size:11px;color:var(--yellow);margin-bottom:8px;}
+#dup-warning-quick{display:none;padding:7px 10px;background:rgba(255,196,0,.1);border:1px solid var(--yellow);border-radius:7px;font-size:11px;color:var(--yellow);margin-bottom:8px;}
+#toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--green);color:var(--green);padding:9px 15px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;transform:translateY(60px);transition:transform .3s;pointer-events:none;}
+#toast.show{transform:translateY(0);}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty-icon{font-size:36px;margin-bottom:8px;}
+/* KP row avec 5 colonnes */
+.kp-row-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr auto;gap:5px;margin-bottom:6px;align-items:center;}
+/* Secondary contacts */
+.sc-card{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 10px;margin-bottom:6px;position:relative;}
+.sc-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.sc-label{font-size:11px;font-weight:600;color:var(--text);}
+
+@media(max-width:768px){
+  #header{flex-wrap:wrap;height:auto;padding:8px 12px;gap:8px;}
+  .hstats{gap:10px;}
+  .hs-n{font-size:14px;}
+  .hbtns{gap:4px;}
+  #search-input{width:120px;}
+  #deadline-counter{display:none;}
+  .dash-grid{grid-template-columns:repeat(2,1fr);}
+  .dash-row,.dash-row-3{grid-template-columns:1fr;}
+  .strat-grid{grid-template-columns:1fr;}
+  .pl-col{min-width:180px;max-width:180px;}
+  .ent-grid{grid-template-columns:1fr;}
+  .analytics-grid{grid-template-columns:1fr;}
+  .frow,.frow-3{grid-template-columns:1fr;}
+  .det-grid,.det-grid-3{grid-template-columns:1fr;}
+  .modal.wide{width:96vw;}
+  .agenda-grid{grid-template-columns:repeat(2,1fr);}
+  .kp-row-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="logo">Alternance<em>PRO</em> <span style="font-size:10px;color:var(--muted);font-weight:400;margin-left:4px">v4</span></div>
+  <div id="deadline-counter" title="Cliquer pour modifier la date cible"></div>
+  <div class="hstats">
+    <div class="hs"><div class="hs-n" id="hs-total">0</div><div class="hs-l">Cibles</div></div>
+    <div class="hs"><div class="hs-n" id="hs-active">0</div><div class="hs-l">Actives</div></div>
+    <div class="hs"><div class="hs-n" id="hs-reply" style="color:var(--purple)">0</div><div class="hs-l">Réponses</div></div>
+    <div class="hs"><div class="hs-n" id="hs-interview" style="color:var(--green)">0</div><div class="hs-l">Entretiens</div></div>
+    <div class="hs"><div class="hs-n" id="hs-followup" style="color:var(--yellow)">0</div><div class="hs-l">Follow-ups</div></div>
+  </div>
+  <div class="hbtns">
+    <input type="text" id="search-input" placeholder="🔍 Rechercher..." oninput="globalSearch(this.value)" onkeydown="if(event.key==='Escape')closeSearch()" autocomplete="off">
+    <div id="search-panel"></div>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Thème">🌙</button>
+    <button class="hbtn hbtn-warn" onclick="exportData()">💾 Export</button>
+    <button class="hbtn hbtn-sec" onclick="document.getElementById('import-file').click()">📂 Import</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+    <button class="hbtn hbtn-sec" onclick="openQuickAdd()">⚡ Quick</button>
+    <button class="hbtn hbtn-sec" onclick="openAddContact()">+ Contact</button>
+    <button class="hbtn hbtn-pri" onclick="openAddCompany()">+ Entreprise</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<div id="nav">
+  <button class="nav-btn active" onclick="switchView('dashboard',this)">📊 Dashboard</button>
+  <button class="nav-btn" onclick="switchView('pipeline',this)">🎯 Pipeline</button>
+  <button class="nav-btn" onclick="switchView('entreprises',this)">🏢 Entreprises</button>
+  <button class="nav-btn" onclick="switchView('contacts',this)">👥 Contacts</button>
+  <button class="nav-btn" onclick="switchView('analytics',this)">📈 Analytics</button>
+  <button class="nav-btn" onclick="switchView('strategie',this)">📋 Stratégie</button>
+</div>
+
+<div id="main">
+
+<!-- DASHBOARD -->
+<div class="view active" id="view-dashboard">
+  <div class="dash-grid">
+    <div class="dash-card" style="--dc-color:var(--cyan)"><div class="dc-val" id="dc-total">0</div><div class="dc-label">Entreprises ciblées</div><div class="dc-sub" id="dc-sub1">—</div></div>
+    <div class="dash-card" style="--dc-color:var(--blue)"><div class="dc-val" id="dc-contacted">0</div><div class="dc-label">Contactées</div><div class="dc-sub" id="dc-sub2">—</div></div>
+    <div class="dash-card" style="--dc-color:var(--purple)"><div class="dc-val" id="dc-replies">0</div><div class="dc-label">Réponses</div><div class="dc-sub" id="dc-sub3">—</div></div>
+    <div class="dash-card" style="--dc-color:var(--green)"><div class="dc-val" id="dc-interviews">0</div><div class="dc-label">Entretiens</div><div class="dc-sub">Objectif : 2/mois</div></div>
+    <div class="dash-card" style="--dc-color:var(--yellow)"><div class="dc-val" id="dc-followups">0</div><div class="dc-label">Follow-ups J+7</div><div class="dc-sub">À relancer maintenant</div></div>
+  </div>
+  <div class="dash-row">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px">
+      <div class="section-title">📈 Funnel <span></span></div>
+      <div id="dash-funnel" style="margin-bottom:14px"></div>
+      <div class="section-title">Objectifs mensuels <span></span></div>
+      <div class="pb-wrap"><div class="pb-header"><span class="pb-label">Contacts envoyés</span><span class="pb-val" id="pb-c-val">0/20</span></div><div class="pb"><div class="pb-fill" id="pb-c" style="width:0%;background:linear-gradient(90deg,var(--blue),var(--cyan))"></div></div></div>
+      <div class="pb-wrap"><div class="pb-header"><span class="pb-label">Réponses</span><span class="pb-val" id="pb-r-val">0/6</span></div><div class="pb"><div class="pb-fill" id="pb-r" style="width:0%;background:linear-gradient(90deg,var(--purple),var(--cyan))"></div></div></div>
+      <div class="pb-wrap"><div class="pb-header"><span class="pb-label">Entretiens</span><span class="pb-val" id="pb-i-val">0/2</span></div><div class="pb"><div class="pb-fill" id="pb-i" style="width:0%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div></div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px">
+      <div class="section-title">🏆 Top 3 à contacter maintenant <span></span></div>
+      <div id="top3-list" class="top3-list"></div>
+      <div style="margin-top:14px"><div class="section-title">⏰ Follow-ups urgents <span></span></div><div id="followup-alerts"></div></div>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px">
+    <div class="section-title">📅 Agenda cette semaine <span></span></div>
+    <div class="agenda-grid" id="agenda-week"></div>
+  </div>
+  <div class="dash-row-3">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;grid-column:span 2">
+      <div class="section-title">🕐 Activité récente <span></span></div>
+      <div class="act-scroll" id="recent-activity"></div>
+      <button class="act-see-all" onclick="openHistoryModal()">📋 Voir tout l'historique</button>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px">
+      <div class="section-title">📊 Par secteur <span></span></div>
+      <div id="sector-breakdown"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<div class="view" id="view-pipeline">
+  <!-- BAC À SABLE -->
+  <div id="sandbox-section" style="display:none" class="sandbox-section">
+    <div class="sandbox-title">📥 Bac à sable — À compléter <span id="sandbox-count" style="background:var(--orange);color:#fff;padding:1px 7px;border-radius:10px;font-size:10px">0</span></div>
+    <div class="sandbox-grid" id="sandbox-grid"></div>
+  </div>
+  <div id="pipeline-board-wrap" onwheel="pipelineWheel(event)">
+    <div class="pipeline-board" id="pipeline-board"></div>
+  </div>
+</div>
+
+<!-- ENTREPRISES -->
+<div class="view" id="view-entreprises">
+  <div class="ent-toolbar">
+    <div class="sector-tabs" id="sector-tabs"></div>
+    <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+      <select id="market-filter" onchange="renderEntreprises()" style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:4px 8px;color:var(--text);font-family:var(--font);font-size:11px;outline:none;">
+        <option value="all">Tous types</option><option value="published">Offre publiée</option>
+        <option value="hidden">Marché caché</option><option value="alumni">Via Alumni</option>
+      </select>
+      <select id="sort-select" onchange="renderEntreprises()" style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:4px 8px;color:var(--text);font-family:var(--font);font-size:11px;outline:none;">
+        <option value="score">Score IA</option><option value="priority">Priorité</option>
+        <option value="name">Nom A-Z</option><option value="status">Statut</option><option value="date">Date</option>
+      </select>
+    </div>
+  </div>
+  <div class="ent-grid" id="ent-grid"></div>
+</div>
+
+<!-- CONTACTS -->
+<div class="view" id="view-contacts">
+  <div class="ct-toolbar">
+    <input class="ct-search" id="ct-search" placeholder="🔍 Rechercher..." oninput="renderContacts()">
+    <select id="ct-filter" onchange="renderContacts()" style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;">
+      <option value="all">Tous</option><option value="à contacter">À contacter</option>
+      <option value="contacté">Contacté</option><option value="répondu">Répondu</option>
+      <option value="meeting">Meeting</option><option value="alumni">Alumni</option>
+    </select>
+  </div>
+  <div class="ct-table-wrap">
+    <table><thead><tr><th>Nom</th><th>Entreprise</th><th>Rôle</th><th>Email</th><th>Tél.</th><th>Statut</th><th>Follow-up</th><th>Actions</th></tr></thead>
+    <tbody id="ct-tbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ANALYTICS -->
+<div class="view" id="view-analytics">
+  <div class="analytics-grid">
+    <div class="ana-card"><div class="ana-title">📧 Taux de réponse par canal</div><div id="ana-by-channel"></div></div>
+    <div class="ana-card"><div class="ana-title">🏢 Taux de réponse par secteur</div><div id="ana-by-sector"></div></div>
+    <div class="ana-card"><div class="ana-title">📅 Performances par jour d'envoi</div><div id="ana-by-day"></div></div>
+  </div>
+  <div class="dash-row">
+    <div class="ana-card"><div class="ana-title">⚡ KPIs personnels</div><div id="ana-kpis"></div></div>
+    <div class="ana-card"><div class="ana-title">🔄 Statuts détaillés</div><div id="ana-status-breakdown"></div></div>
+  </div>
+</div>
+
+<!-- STRATEGIE -->
+<div class="view" id="view-strategie">
+  <div class="strat-grid">
+    <div class="strat-card">
+      <div class="strat-title">⚡ Méthode Sniper (5 étapes)</div>
+      <div class="strat-step"><div class="snum">1</div><div><div class="stxt">Identifier 3 entreprises cibles / jour sur WTTJ</div><div class="ssub">Filtrer Fintech + alternance + Paris</div></div></div>
+      <div class="strat-step"><div class="snum">2</div><div><div class="stxt">Trouver le bon décideur sur LinkedIn</div><div class="ssub">Head of Sales, Manager direct — pas les RH en 1er</div></div></div>
+      <div class="strat-step"><div class="snum">3</div><div><div class="stxt">Message personnalisé avec un point commun</div><div class="ssub">Jamais demander le stage dès le 1er message</div></div></div>
+      <div class="strat-step"><div class="snum">4</div><div><div class="stxt">Follow-up à J+7 si pas de réponse</div><div class="ssub">Email direct si tu as l'adresse (Hunter.io)</div></div></div>
+      <div class="strat-step"><div class="snum">5</div><div><div class="stxt">Call 10-15 min → convertir en entretien</div><div class="ssub">Prépare ton pitch 2 min + 3 questions</div></div></div>
+    </div>
+    <div class="strat-card"><div class="strat-title">✅ Checklist hebdomadaire</div><div id="weekly-checklist"></div></div>
+    <div class="strat-card">
+      <div class="strat-title">💡 Règles d'or</div>
+      <div class="rules-grid">
+        <div class="rule-box"><div class="rule-title" style="color:var(--red)">❌ JAMAIS</div>
+          <div class="rule-item">Envoyer un CV sans message avant</div>
+          <div class="rule-item">Demander le stage dès le 1er message</div>
+          <div class="rule-item">Relancer plus de 2 fois le même contact</div>
+          <div class="rule-item">Message générique copié-collé</div>
+          <div class="rule-item">Envoyer le vendredi après-midi</div>
+        </div>
+        <div class="rule-box"><div class="rule-title" style="color:var(--green)">✅ TOUJOURS</div>
+          <div class="rule-item">Utiliser un point commun concret</div>
+          <div class="rule-item">Parler de KPIs et résultats chiffrés</div>
+          <div class="rule-item">Proposer un appel de 10 min max</div>
+          <div class="rule-item">Être direct, respecter leur temps</div>
+          <div class="rule-item">Envoyer mardi/jeudi 8h30-9h30</div>
+        </div>
+      </div>
+    </div>
+    <div class="strat-card">
+      <div class="strat-title">⏰ Timing & Conseils Email</div>
+      <div class="tip-list">
+        <div class="tip-item good"><strong>✅ Mardi / Jeudi 8h30-9h30</strong> — Taux d'ouverture x2.</div>
+        <div class="tip-item"><strong>⚠️ Mercredi matin</strong> — Acceptable mais moins efficace.</div>
+        <div class="tip-item bad"><strong>❌ Lundi matin / Vendredi PM</strong> — À éviter.</div>
+        <div class="tip-item good"><strong>✅ Objet personnalisé</strong> — "De Poitiers à la Fintech" > "Candidature alternance".</div>
+        <div class="tip-item bad"><strong>❌ Mass-apply</strong> — ATS + zéro personnalisation. ROI nul.</div>
+      </div>
+    </div>
+    <div class="strat-card" style="grid-column:span 2">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div class="strat-title" style="margin-bottom:0">📝 Templates de messages</div>
+        <span style="font-size:10px;color:var(--muted)">Variables : <strong style="color:var(--cyan)">[Prénom]</strong> <strong style="color:var(--cyan)">[Entreprise]</strong></span>
+      </div>
+      <div class="tmpl-tabs" id="tmpl-tabs"></div>
+      <div id="tmpl-display"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<!-- COMPANY DETAIL MODAL -->
+<div class="overlay" id="company-detail-modal">
+  <div class="modal wide">
+    <div class="modal-head">
+      <div><div class="modal-title" id="det-company-name">—</div><div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap" id="det-company-badges"></div></div>
+      <button class="modal-close" onclick="closeOverlay('company-detail-modal')">✕</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="mtab active" onclick="switchDetTab(0,this)">📋 Infos</button>
+      <button class="mtab" onclick="switchDetTab(1,this)">👥 Contacts</button>
+      <button class="mtab" onclick="switchDetTab(2,this)">🎯 Suivi</button>
+      <button class="mtab" onclick="switchDetTab(3,this)">🗓 Entretien</button>
+      <button class="mtab" onclick="switchDetTab(4,this)">📝 Notes & Log</button>
+    </div>
+    <div class="modal-body" id="det-body"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeOverlay('company-detail-modal')">Fermer</button>
+      <button class="btn-cancel" onclick="editCurrentCompany()" style="color:var(--cyan);border-color:var(--cyan)">✏️ Modifier</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMPANY FORM MODAL -->
+<div class="overlay" id="company-form-modal">
+  <div class="modal wide">
+    <div class="modal-head">
+      <div class="modal-title" id="form-company-title">➕ Nouvelle entreprise</div>
+      <button class="modal-close" onclick="closeOverlay('company-form-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="dup-warning"></div>
+      <div class="frow">
+        <div class="field"><label>Nom *</label><input type="text" id="fc-name" placeholder="ex: Qonto" oninput="checkDuplicate(this.value)"></div>
+        <div class="field"><label>Site web</label><input type="text" id="fc-website" placeholder="qonto.com"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>Secteur *</label>
+          <select id="fc-sector">
+            <option value="Fintech">Fintech</option><option value="Scale-up Tech">Scale-up Tech</option>
+            <option value="Hospitality Tech">Hospitality Tech</option><option value="SaaS B2B">SaaS B2B</option>
+            <option value="Greentech / Industrie">Greentech / Industrie</option><option value="Luxe & Retail">Luxe & Retail</option>
+            <option value="Para-public">Para-public</option><option value="Autre">Autre</option>
+          </select>
+        </div>
+        <div class="field"><label>Stade</label>
+          <select id="fc-stage"><option value="Startup">Startup</option><option value="Scale-up">Scale-up</option><option value="Licorne">Licorne</option><option value="Grand Groupe">Grand Groupe</option><option value="PME">PME</option></select>
+        </div>
+      </div>
+      <div class="frow-3">
+        <div class="field"><label>Fondée en</label><input type="text" id="fc-founded" placeholder="2016"></div>
+        <div class="field"><label>Employés</label><input type="text" id="fc-employees" placeholder="500-1000"></div>
+        <div class="field"><label>Levée de fonds</label><input type="text" id="fc-funding" placeholder="€626M"></div>
+      </div>
+      <div class="field"><label>Description</label><textarea id="fc-desc" placeholder="Activité, positionnement, clients cibles..."></textarea></div>
+      <div class="field"><label>🎣 Mon hook / accroche personnalisée</label><input type="text" id="fc-hook" placeholder="ex: Fondé à Poitiers, lien avec Figaro, expérience restauration..."></div>
+      <div class="frow">
+        <div class="field"><label>Type de marché</label>
+          <select id="fc-market">
+            <option value="published">Offre publiée (WTTJ / LinkedIn)</option>
+            <option value="hidden">Marché caché (prospection directe)</option>
+            <option value="alumni">Via Alumni / Réseau</option>
+          </select>
+        </div>
+        <div class="field"><label>Priorité</label>
+          <select id="fc-priority"><option value="high">🔴 Haute</option><option value="medium">🟡 Moyenne</option><option value="low">🟢 Basse</option></select>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px;font-weight:600">👥 Key People (Nom / Rôle / LinkedIn / Email / Tél.)</div>
+      <div id="kp-list"></div>
+      <button onclick="addKeyPerson()" style="font-size:11px;padding:4px 10px;border-radius:6px;background:var(--bg3);border:1px dashed var(--border2);color:var(--muted);cursor:pointer;font-family:var(--font);margin-bottom:10px">+ Ajouter une personne clé</button>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px;font-weight:600">📬 Mon contact direct</div>
+      <div class="frow">
+        <div class="field"><label>Nom</label><input type="text" id="fc-cname" placeholder="Marie Dupont"></div>
+        <div class="field"><label>Poste</label><input type="text" id="fc-crole" placeholder="Head of Sales"></div>
+      </div>
+      <div class="frow-3">
+        <div class="field"><label>Email</label><input type="text" id="fc-cemail" placeholder="m.dupont@qonto.com"></div>
+        <div class="field"><label>LinkedIn</label><input type="text" id="fc-clinkedin" placeholder="linkedin.com/in/..."></div>
+        <div class="field"><label>Téléphone</label><input type="text" id="fc-cphone" placeholder="+33 6..."></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px;font-weight:600">👤 Contacts secondaires</div>
+      <div id="sc-list"></div>
+      <button onclick="addSecondaryContact()" style="font-size:11px;padding:4px 10px;border-radius:6px;background:var(--bg3);border:1px dashed var(--border2);color:var(--muted);cursor:pointer;font-family:var(--font);margin-bottom:10px">+ Ajouter un contact secondaire</button>
+      <div class="frow">
+        <div class="field"><label>Statut</label>
+          <select id="fc-status">
+            <option value="0">🎯 À contacter</option>
+            <option value="1">📤 Contacté</option>
+            <option value="2">💬 Réponse reçue</option>
+            <option value="3">🤝 Entretien planifié</option>
+            <option value="4">🏆 Offre reçue</option>
+            <option value="5">❌ Refusé</option>
+            <option value="6">💤 Sans réponse (2 relances)</option>
+          </select>
+        </div>
+        <div class="field"><label>Canal d'approche</label>
+          <select id="fc-channel"><option value="linkedin">LinkedIn</option><option value="email">Email direct</option><option value="referral">Via réseau / intro</option><option value="wttj">WTTJ / Candidature</option></select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>Date de contact</label><input type="date" id="fc-date"></div>
+        <div class="field"><label>Date follow-up</label><input type="date" id="fc-followup"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>⚡ Prochaine action</label><input type="text" id="fc-next-action" placeholder="ex: Envoyer email follow-up mardi matin"></div>
+        <div class="field"><label>Date prochaine action</label><input type="date" id="fc-next-date"></div>
+      </div>
+      <div class="field"><label>Notes</label><textarea id="fc-notes" placeholder="Points communs, contexte, suite à donner..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeOverlay('company-form-modal')">Annuler</button>
+      <button class="btn-save" onclick="saveCompany()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK ADD MODAL -->
+<div class="overlay" id="quick-add-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">⚡ Ajout rapide → Bac à sable</div>
+      <button class="modal-close" onclick="closeOverlay('quick-add-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">L'entreprise ira dans le <strong style="color:var(--orange)">Bac à sable</strong> jusqu'à ce que tu complètes ses informations.</p>
+      <div id="dup-warning-quick"></div>
+      <div class="field"><label>Nom de l'entreprise *</label><input type="text" id="qa-name" placeholder="ex: Pennylane" oninput="checkDuplicateQuick(this.value)"></div>
+      <div class="frow">
+        <div class="field"><label>Secteur</label>
+          <select id="qa-sector"><option value="Fintech">Fintech</option><option value="Scale-up Tech">Scale-up Tech</option><option value="Hospitality Tech">Hospitality Tech</option><option value="SaaS B2B">SaaS B2B</option><option value="Greentech / Industrie">Greentech / Industrie</option><option value="Para-public">Para-public</option><option value="Autre">Autre</option></select>
+        </div>
+        <div class="field"><label>Priorité</label>
+          <select id="qa-priority"><option value="high">🔴 Haute</option><option value="medium">🟡 Moyenne</option><option value="low">🟢 Basse</option></select>
+        </div>
+      </div>
+      <div class="field"><label>🎣 Hook / Note rapide</label><input type="text" id="qa-hook" placeholder="Pourquoi cette boîte t'intéresse ?"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeOverlay('quick-add-modal')">Annuler</button>
+      <button class="btn-save" onclick="saveQuickAdd()">→ Bac à sable</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT FORM MODAL -->
+<div class="overlay" id="contact-form-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="form-contact-title">➕ Nouveau contact</div>
+      <button class="modal-close" onclick="closeOverlay('contact-form-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="frow">
+        <div class="field"><label>Nom *</label><input type="text" id="fct-name" placeholder="Marie Dupont"></div>
+        <div class="field"><label>Rôle</label><input type="text" id="fct-role" placeholder="Head of Sales"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>Entreprise</label><input type="text" id="fct-company" placeholder="Qonto"></div>
+        <div class="field"><label>Email</label><input type="text" id="fct-email" placeholder="m.dupont@qonto.com"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>LinkedIn</label><input type="text" id="fct-linkedin" placeholder="linkedin.com/in/..."></div>
+        <div class="field"><label>Téléphone</label><input type="text" id="fct-phone" placeholder="+33 6..."></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>Statut</label>
+          <select id="fct-status"><option value="à contacter">À contacter</option><option value="contacté">Contacté</option><option value="répondu">Répondu</option><option value="meeting">Meeting</option><option value="alumni">Alumni réseau</option></select>
+        </div>
+        <div class="field"><label>Follow-up</label><input type="date" id="fct-followup"></div>
+      </div>
+      <div class="field"><label>Notes</label><textarea id="fct-notes" placeholder="Contexte, point commun, suite..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeOverlay('contact-form-modal')">Annuler</button>
+      <button class="btn-save" onclick="saveContact()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="overlay" id="history-modal">
+  <div class="modal" style="width:700px;">
+    <div class="modal-head">
+      <div class="modal-title">📋 Historique complet d'activité</div>
+      <button class="modal-close" onclick="closeOverlay('history-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="history-filter" id="history-filter">
+        <button class="hfilt-btn active" onclick="filterHistory('all',this)">Tout</button>
+        <button class="hfilt-btn" onclick="filterHistory('linkedin',this)">🔗 LinkedIn</button>
+        <button class="hfilt-btn" onclick="filterHistory('email',this)">📧 Email</button>
+        <button class="hfilt-btn" onclick="filterHistory('call',this)">📞 Appel</button>
+        <button class="hfilt-btn" onclick="filterHistory('entretien',this)">🤝 Entretien</button>
+        <button class="hfilt-btn" onclick="filterHistory('note',this)">📝 Note</button>
+      </div>
+      <div class="history-log" id="history-log-body"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeOverlay('history-modal')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">✓ Enregistré</div>
+
+<script>
+// ============================================================
+// THEME
+// ============================================================
+(function(){
+  const t=localStorage.getItem('crm_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  const b=document.getElementById('theme-btn');
+  if(b)b.textContent=t==='dark'?'☀️':'🌙';
+})();
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('crm_theme',next);
+  document.getElementById('theme-btn').textContent=next==='dark'?'☀️':'🌙';
+}
+
+// ============================================================
+// STAGES — Fusion "Contacté" + "En attente" → 1 seule étape
+// Ancien mapping: 0,1,2(En attente),3,4,5,6,7
+// Nouveau:        0,1(Contacté),   2(Réponse),3(Entretien),4(Offre),5(Refusé),6(Sans réponse)
+// ============================================================
+const STAGES=[
+  {id:0,label:'🎯 À contacter',color:'#4a6880'},
+  {id:1,label:'📤 Contacté',color:'#00c8ff'},
+  {id:2,label:'💬 Réponse reçue',color:'#b388ff'},
+  {id:3,label:'🤝 Entretien',color:'#1e6fff'},
+  {id:4,label:'🏆 Offre reçue',color:'#00e676'},
+  {id:5,label:'❌ Refusé',color:'#ff3d3d'},
+  {id:6,label:'💤 Sans réponse',color:'#2d4a66'}
+];
+// Migration depuis l'ancien format (8 statuts → 7)
+function migrateStatus(old){
+  if(old===0)return 0;
+  if(old===1)return 1;
+  if(old===2)return 1; // En attente → Contacté
+  if(old===3)return 2;
+  if(old===4)return 3;
+  if(old===5)return 4;
+  if(old===6)return 5;
+  if(old===7)return 6;
+  return old<=6?old:0;
+}
+
+const SBADGE={'Fintech':'badge-fintech','Scale-up Tech':'badge-tech','Hospitality Tech':'badge-hosp','Greentech / Industrie':'badge-green','Luxe & Retail':'badge-luxe','Para-public':'badge-pub','SaaS B2B':'badge-saas','Autre':'badge-tech'};
+const SCOLOR={'Fintech':'var(--cyan)','Scale-up Tech':'var(--blue)','Hospitality Tech':'var(--yellow)','Greentech / Industrie':'var(--green)','Luxe & Retail':'var(--purple)','Para-public':'var(--orange)','SaaS B2B':'var(--red)','Autre':'var(--blue)'};
+
+// ============================================================
+// DEADLINE — éditable
+// ============================================================
+let DEADLINE=new Date(localStorage.getItem('crm_deadline')||'2026-09-01');
+function renderDeadline(){
+  const el=document.getElementById('deadline-counter');
+  const diff=Math.ceil((DEADLINE-Date.now())/(1000*60*60*24));
+  let color='var(--green)';
+  if(diff<180)color='var(--yellow)';
+  if(diff<90)color='var(--red)';
+  el.style.borderColor=color;el.style.color=color;
+  const dateVal=DEADLINE.toISOString().split('T')[0];
+  el.innerHTML=`<span>⏳ J-${diff}</span><input type="date" id="deadline-date-input" value="${dateVal}" title="Modifier la date cible" onchange="updateDeadline(this.value)" onclick="event.stopPropagation()">`;
+}
+function updateDeadline(val){
+  if(!val)return;
+  DEADLINE=new Date(val);
+  localStorage.setItem('crm_deadline',val);
+  renderDeadline();
+}
+
+// ============================================================
+// DATA STANDARDIZATION — mkCompany
+// ============================================================
+function mkCompany(o){
+  const base={
+    id:Date.now()+Math.floor(Math.random()*9999),
+    name:'',website:'',sector:'Fintech',stage:'Scale-up',
+    founded:'',employees:'',funding:'',description:'',
+    hook:'',marketType:'hidden',inbox:false,
+    keyPeople:[],     // {name,role,linkedin,email,phone}
+    myContact:{name:'',role:'',email:'',linkedin:'',phone:''},
+    secondaryContacts:[], // [{name,role,email,linkedin,phone}]
+    status:0,priority:'medium',channel:'linkedin',
+    date:'',followUpDate:'',
+    nextAction:'',nextActionDate:'',
+    notes:'',activityLog:[],
+    interviewPrep:{pitch:'',questions:['','',''],keyFacts:'',interviewDate:''},
+    createdAt:new Date().toISOString()
+  };
+  const m=Object.assign({},base,o||{});
+  if(!m.myContact)m.myContact={name:'',role:'',email:'',linkedin:'',phone:''};
+  if(!m.myContact.phone)m.myContact.phone='';
+  if(!m.activityLog)m.activityLog=[];
+  if(!m.keyPeople)m.keyPeople=[];
+  if(!m.secondaryContacts)m.secondaryContacts=[];
+  if(!m.interviewPrep)m.interviewPrep={pitch:'',questions:['','',''],keyFacts:'',interviewDate:''};
+  if(m.hook===undefined)m.hook='';
+  if(m.nextAction===undefined)m.nextAction='';
+  if(m.nextActionDate===undefined)m.nextActionDate='';
+  if(m.marketType===undefined)m.marketType='hidden';
+  if(m.channel===undefined)m.channel='linkedin';
+  if(m.inbox===undefined)m.inbox=false;
+  // Migrate old status values
+  m.status=migrateStatus(m.status);
+  // Normalise keyPeople
+  m.keyPeople=m.keyPeople.map(p=>({name:p.name||'',role:p.role||'',linkedin:p.linkedin||'',email:p.email||'',phone:p.phone||''}));
+  return m;
+}
+
+// ============================================================
+// SMART SCORE
+// ============================================================
+function smartScore(c){
+  let s=0;
+  if(c.priority==='high')s+=30;else if(c.priority==='medium')s+=15;
+  if(c.status===0)s+=20;
+  if(c.hook&&c.hook.length>5)s+=15;
+  if(c.myContact&&c.myContact.name)s+=10;
+  if(c.marketType==='alumni')s+=10;
+  const ago=daysAgo(c.date);
+  if(ago>=7&&c.status===1)s+=20;
+  if(c.sector==='Fintech')s+=5;
+  if(c.sector==='Hospitality Tech')s+=5;
+  return Math.max(0,Math.min(100,s));
+}
+
+// ============================================================
+// SEED DATA (toutes les entreprises v3)
+// ============================================================
+const SEED=[
+  mkCompany({id:1,name:'Qonto',sector:'Fintech',website:'qonto.com',founded:'2016',employees:'1 200+',funding:'€626M',stage:'Licorne',description:'Solution financière tout-en-un pour PME et indépendants européens.',hook:'Expérience comptabilité Figaro = fit direct avec leur produit finance B2B',marketType:'hidden',keyPeople:[{name:'Alexandre Prot',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/alexandreprot',email:'',phone:''},{name:'Steve Anavi',role:'COO & Co-fondateur',linkedin:'linkedin.com/in/steveanavi',email:'',phone:''}],priority:'high',notes:'Cible #1. Chercher Head of Sales ou Sales Manager.'}),
+  mkCompany({id:2,name:'Revolut',sector:'Fintech',website:'revolut.com',founded:'2015',employees:'8 000+',funding:'$45B valuation',stage:'Licorne',description:'Super-app financière mondiale. 35M+ clients dans 35 pays.',hook:'Point commun : Ali Duman / Poitiers / Futuroscope',marketType:'hidden',keyPeople:[{name:'Nikolay Storonsky',role:'CEO',linkedin:'linkedin.com/in/nikolaystoronskyuk',email:'',phone:''},{name:'Ali Duman',role:'Senior Sales Manager Paris',linkedin:'linkedin.com/in/ali-duman',email:'',phone:''}],myContact:{name:'Ali Duman',role:'Senior Sales Manager',email:'',linkedin:'linkedin.com/in/ali-duman',phone:''},status:1,priority:'high',date:new Date().toISOString().split('T')[0],notes:'LinkedIn + email envoyés. Relancer à J+7.',activityLog:[{date:new Date().toISOString().split('T')[0],action:'Message LinkedIn envoyé — accroche Poitiers/Futuroscope',type:'linkedin'},{date:new Date().toISOString().split('T')[0],action:'Email direct envoyé avec CV FR+EN',type:'email'}]}),
+  mkCompany({id:101,name:'Sunday',sector:'Hospitality Tech',website:'sundayapp.io',founded:'2021',employees:'300+',funding:'€130M',stage:'Scale-up',description:'Paiement par QR code pour restaurants. Scan → payer → partir en 10 secondes.',hook:'FIT PARFAIT : QR code + restauration + BTS MHR + Jardins de Bakea + Ibis Styles',marketType:'hidden',keyPeople:[{name:'Victor Lugger',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/victorlugger',email:'',phone:''}],priority:'high'}),
+  mkCompany({id:3,name:'Spendesk',sector:'Fintech',website:'spendesk.com',founded:'2016',employees:'400+',funding:'€115M',stage:'Scale-up',description:'Plateforme de gestion des dépenses et cartes virtuelles pour entreprises.',hook:'Gestion dépenses B2B = lien direct avec gestion facturation Figaro',marketType:'hidden',keyPeople:[{name:'Rodolphe Ardant',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/rodolpheardant',email:'',phone:''}],priority:'high'}),
+  mkCompany({id:4,name:'Pennylane',sector:'Fintech',website:'pennylane.com',founded:'2020',employees:'350+',funding:'€100M',stage:'Scale-up',description:'Logiciel comptabilité et gestion financière pour TPE/PME.',hook:'Produit comptabilité = expérience directe Figaro Apprenti Comptable',marketType:'hidden',keyPeople:[{name:'Arthur Waller',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/arthurwaller',email:'',phone:''}],priority:'high'}),
+  mkCompany({id:114,name:'Agicap',sector:'Fintech',website:'agicap.com',founded:'2017',employees:'600+',funding:'€130M',stage:'Scale-up',description:'Logiciel de gestion et prévision de trésorerie pour PME.',hook:'Trésorerie = cœur de métier Figaro (-20% délais, -50% relances)',marketType:'hidden',priority:'high'}),
+  mkCompany({id:303,name:'Pigment',sector:'Scale-up Tech',website:'pigment.app',founded:'2019',employees:'400+',funding:'€200M',stage:'Scale-up',description:'Plateforme FP&A nouvelle génération. Remplace Excel pour la planification financière.',hook:'Finance + Excel avancé (XLOOKUP) = double compétence valorisée',marketType:'hidden',priority:'high'}),
+  mkCompany({id:5,name:'Lydia / Sumeria',sector:'Fintech',website:'sumeria.fr',founded:'2013',employees:'200+',funding:'€131M',stage:'Scale-up',description:'Néo-banque française, pionnier du paiement mobile en France.',hook:'',marketType:'hidden',priority:'high'}),
+  mkCompany({id:6,name:'Swile',sector:'Fintech',website:'swile.co',founded:'2018',employees:'700+',funding:'€175M',stage:'Licorne',description:'Super-app employee benefits : titres-restaurant, avantages salariés.',hook:'',marketType:'hidden',priority:'medium'}),
+  mkCompany({id:7,name:'Alan',sector:'Fintech',website:'alan.com',founded:'2016',employees:'600+',funding:'€220M',stage:'Licorne',description:'Assurance santé digitale pour entreprises. Modèle SaaS B2B disruptif.',hook:'',marketType:'hidden',priority:'medium'}),
+  mkCompany({id:9,name:'Payfit',sector:'Fintech',website:'payfit.com',founded:'2015',employees:'800+',funding:'€283M',stage:'Licorne',description:'Logiciel de gestion de la paie et RH pour PME.',hook:'',marketType:'hidden',priority:'medium'}),
+  mkCompany({id:102,name:'Alma',sector:'Fintech',website:'getalma.eu',founded:'2018',employees:'300+',funding:'€130M',stage:'Scale-up',description:'BNPL B2B pour e-commerce et commerce physique. Leader du paiement fractionné.',hook:'',marketType:'hidden',priority:'high',notes:'French Tech 120.'}),
+  mkCompany({id:104,name:'Mangopay',sector:'Fintech',website:'mangopay.com',founded:'2013',employees:'400+',funding:'€75M',stage:'Scale-up',description:'Plateforme de paiement pour marketplaces.',hook:'',marketType:'hidden',priority:'medium',notes:'French Tech 120.'}),
+  mkCompany({id:105,name:'October',sector:'Fintech',website:'fr.october.eu',founded:'2014',employees:'200+',funding:'€70M',stage:'Scale-up',description:'Prêt en ligne aux PME européennes.',hook:'Expertise Finance + compréhension des bilans',marketType:'hidden',priority:'medium'}),
+  mkCompany({id:107,name:'Silvr',sector:'Fintech',website:'silvr.co',founded:'2020',employees:'80+',funding:'€120M',stage:'Startup',description:'Revenue-based financing pour e-commerçants.',hook:'',marketType:'hidden',priority:'medium',notes:'French Tech 120.'}),
+  mkCompany({id:112,name:'Fintecture',sector:'Fintech',website:'fintecture.com',founded:'2019',employees:'80+',funding:'€25M',stage:'Startup',description:'Open banking payments — virement bancaire instantané.',hook:'',marketType:'hidden',priority:'medium',notes:'French Tech 120.'}),
+  mkCompany({id:115,name:'Sidetrade',sector:'Fintech',website:'sidetrade.com',founded:'2000',employees:'300+',funding:'Coté Euronext',stage:'Grand Groupe',description:"IA pour l'automatisation du cash collection B2B.",hook:'-50% relances fournisseurs au Figaro = argument direct',marketType:'hidden',priority:'medium'}),
+  mkCompany({id:11,name:'Zenchef',sector:'Hospitality Tech',website:'zenchef.com',founded:'2010',employees:'300+',funding:'€50M',stage:'Scale-up',description:'Logiciel de réservation et gestion de restaurant.',hook:'BTS MHR + Jardins de Bakea = crédibilité terrain',marketType:'hidden',priority:'medium'}),
+  mkCompany({id:12,name:'Skello',sector:'Hospitality Tech',website:'skello.io',founded:'2016',employees:'200+',funding:'€40M',stage:'Scale-up',description:'Logiciel de planification des plannings pour restauration et hôtellerie.',hook:'BTS MHR + expérience restauration',marketType:'hidden',priority:'medium'}),
+  mkCompany({id:201,name:'Innovorder',sector:'Hospitality Tech',website:'innovorder.com',founded:'2011',employees:'150+',funding:'€12M',stage:'Scale-up',description:'Solutions de commande digitale et kiosques pour restauration.',hook:'BTS MHR + Ibis Styles + Jardins de Bakea',marketType:'hidden',priority:'high'}),
+  mkCompany({id:302,name:'Partoo',sector:'Scale-up Tech',website:'partoo.co',founded:'2014',employees:'400+',funding:'€110M',stage:'Scale-up',description:'Plateforme de gestion de la présence locale pour enseignes multi-sites.',hook:'',marketType:'hidden',priority:'medium',notes:'French Tech 120.'}),
+  mkCompany({id:14,name:'Fraîcheur de Paris',sector:'Greentech / Industrie',website:'fraicheurparis.fr',founded:'1991',employees:'150+',funding:'DSP publique',stage:'Grand Groupe',description:"Réseau de froid urbain de Paris. Délégation de service public.",hook:'Contact indirect via pote — sa sœur y travaille',marketType:'alumni',priority:'medium'}),
+  mkCompany({id:15,name:'BPI France',sector:'Para-public',website:'bpifrance.fr',founded:'2012',employees:'3 500+',funding:'Public',stage:'Grand Groupe',description:"Banque publique d'investissement. Finance startups et PME.",hook:'',marketType:'hidden',priority:'low'}),
+
+  // ===== FINTECH & INSURTECH (nouveaux) =====
+  mkCompany({id:1001,name:'Ledger',sector:'Fintech',website:'ledger.com',founded:'2014',employees:'900+',funding:'€380M',stage:'Scale-up',description:"Leader mondial du hardware wallet crypto (Nano). Sécurise les actifs numériques de +6M clients. Gamme B2C et offre B2B institutionnelle Ledger Enterprise.",hook:'Investissement perso en crypto + expertise Finance = double profil pertinent pour leur équipe Sales',marketType:'hidden',keyPeople:[{name:'Pascal Gauthier',role:'CEO',linkedin:'linkedin.com/in/pascalgauthier',email:'',phone:''},{name:'Ian Rogers',role:'Chief Experience Officer',linkedin:'',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Profil Finance + intérêt crypto = accroche naturelle. Chercher Head of Sales B2B.'}),
+
+  mkCompany({id:1002,name:'Younited',sector:'Fintech',website:'younited-credit.com',founded:'2009',employees:'350+',funding:'€170M',stage:'Scale-up',description:"Établissement de crédit européen 100% digital. Prêt à la consommation et crédit B2B intégré (Younited Pay) pour partenaires e-commerce et entreprises.",hook:'Finance + crédit B2B = expertise Figaro comptabilité valorisable',marketType:'hidden',keyPeople:[{name:'Charles Egly',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/charlesegly',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Embedded finance en croissance.'}),
+
+  mkCompany({id:1003,name:'Descartes Underwriting',sector:'Fintech',website:'descartesunderwriting.com',founded:'2018',employees:'200+',funding:'€120M',stage:'Scale-up',description:"Insurtech B2B : assurance paramétrique basée sur IA et data satellite contre risques climatiques. Clients : grands groupes et assureurs institutionnels. Cycle de vente long.",hook:'Vente B2B ultra-complexe à interlocuteurs multiples = définition exacte de l\'Ingénieur d\'Affaires',marketType:'hidden',keyPeople:[{name:'Tanguy Touffut',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/tanguytouffut',email:'',phone:''}],priority:'high',notes:'Fit FORT sur le cycle de vente long et complexe. Cœur du métier Ingénieur d\'Affaires.'}),
+
+  mkCompany({id:1004,name:'Mooncard',sector:'Fintech',website:'mooncard.co',founded:'2018',employees:'150+',funding:'€35M',stage:'Scale-up',description:"Carte corporate et gestion des notes de frais tout-en-un pour PME/ETI. Alternative à Spendesk sur le segment mid-market. Intégration comptable native.",hook:'Gestion des dépenses B2B = lien direct avec ma mission au Figaro (facturation multi-filiales)',marketType:'hidden',keyPeople:[{name:'Tristan Leteurtre',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/tristanleteurtre',email:'',phone:''}],priority:'high',notes:'Pitch évident : "J\'ai géré la facturation multi-filiales du Groupe Figaro — leur produit aurait divisé mon temps de traitement par 2."'}),
+
+  mkCompany({id:1005,name:'Defacto',sector:'Fintech',website:'getdefacto.com',founded:'2021',employees:'100+',funding:'€100M',stage:'Startup',description:"Financement court terme instantané pour e-commerçants et marketplaces. Embedded finance B2B. Credit-as-a-Service intégré en API.",hook:'Finance B2B + cycle de vente technique = bon fit profil hybride',marketType:'hidden',keyPeople:[{name:'Jordan Abadie',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/jordanabadie',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Startup en forte croissance, équipe Sales à construire.'}),
+
+  // ===== HR TECH & MANAGEMENT (nouveaux) =====
+  mkCompany({id:1101,name:'Malt',sector:'SaaS B2B',website:'malt.fr',founded:'2013',employees:'500+',funding:'€130M',stage:'Scale-up',description:"Marketplace de freelances B2B leader en Europe. Connecte entreprises et freelances tech, marketing, finance. 700 000+ freelances, 70 000+ entreprises clientes.",hook:'Tu utilises leur plateforme pour chercher ton alternance — accroche produit ultra concrète et authentique',marketType:'hidden',keyPeople:[{name:'Vincent Huguet',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/vincenthuguet',email:'',phone:''},{name:'David Fonta',role:'Co-fondateur',linkedin:'linkedin.com/in/davidfonta',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Accroche : "Je cherche mon alternance sur votre plateforme — j\'aimerais comprendre comment vous vendez ce produit aux DRH."'}),
+
+  mkCompany({id:1102,name:'Welcome to the Jungle',sector:'SaaS B2B',website:'welcometothejungle.com',founded:'2015',employees:'400+',funding:'€50M',stage:'Scale-up',description:"Plateforme RH B2B : employer branding, job board et marque employeur. 5M+ candidats actifs, 6 000+ entreprises clientes. Modèle SaaS abonnement.",hook:'Tu utilises leur produit chaque jour pour trouver ton alternance = argument terrain parfait pour le Sales pitch',marketType:'hidden',keyPeople:[{name:'Jérémy Clédat',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/jeremycledat',email:'',phone:''},{name:'Bertrand Uzeel',role:'Co-fondateur',linkedin:'',email:'',phone:''}],priority:'high',notes:'Accroche parfaite : "Je cherche mon alternance sur WTTJ — je suis donc votre produit sous deux angles : candidat ET futur commercial B2B."'}),
+
+  mkCompany({id:1103,name:'360Learning',sector:'SaaS B2B',website:'360learning.com',founded:'2013',employees:'500+',funding:'€200M',stage:'Scale-up',description:"LMS collaboratif pour entreprises. Formation interne pilotée par les experts métier. 1 700+ clients : L'Oréal, LVMH, Airbus.",hook:'',marketType:'hidden',keyPeople:[{name:'Nicolas Hernandez',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/nicolashernandez',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Vente B2B enterprise.'}),
+
+  mkCompany({id:1104,name:'Lumapps',sector:'SaaS B2B',website:'lumapps.com',founded:'2015',employees:'500+',funding:'€100M',stage:'Scale-up',description:"Plateforme d'intranet social et communication interne pour grands comptes. Intégré nativement Google Workspace et Microsoft 365.",hook:'',marketType:'hidden',keyPeople:[{name:'Sébastien Ricard',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/sebastienricard',email:'',phone:''}],priority:'low',notes:'French Tech 120.'}),
+
+  mkCompany({id:1105,name:'Skeepers',sector:'SaaS B2B',website:'skeepers.io',founded:'2020',employees:'400+',funding:'€50M',stage:'Scale-up',description:"Suite SaaS d'activation clients : avis consommateurs, UGC (User Generated Content), influenceurs, live shopping. B2B e-commerce et retail.",hook:'',marketType:'hidden',keyPeople:[{name:'Yann Franc',role:'CEO',linkedin:'linkedin.com/in/yannfranc',email:'',phone:''}],priority:'low',notes:'French Tech 120.'}),
+
+  mkCompany({id:1106,name:'Workelo',sector:'SaaS B2B',website:'workelo.eu',founded:'2019',employees:'100+',funding:'€10M',stage:'Startup',description:"Plateforme d'onboarding et offboarding RH pour PME et ETI. Automatise l'intégration des nouveaux collaborateurs et la gestion des départs.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:1107,name:'Platform.sh',sector:'SaaS B2B',website:'platform.sh',founded:'2015',employees:'400+',funding:'€140M',stage:'Scale-up',description:"PaaS cloud enterprise pour développeurs. Déploiement et gestion d'applications web complexes pour grandes entreprises.",hook:'',marketType:'hidden',keyPeople:[{name:'Fred Plais',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/fredplais',email:'',phone:''}],priority:'low',notes:'French Tech 120. Très technique.'}),
+
+  mkCompany({id:1108,name:'Iziwork',sector:'SaaS B2B',website:'iziwork.com',founded:'2018',employees:'200+',funding:'€40M',stage:'Scale-up',description:"Agence de travail temporaire 100% digitale. Mise en relation employeurs et intérimaires via app mobile. Secteurs : logistique, industrie, grande distribution.",hook:'',marketType:'hidden',keyPeople:[{name:'Paulin Oudin',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/paulinoudin',email:'',phone:''}],priority:'low',notes:'French Tech 120.'}),
+
+  // ===== RETAIL & MARKETPLACES (nouveaux) =====
+  mkCompany({id:1201,name:'Back Market',sector:'Luxe & Retail',website:'backmarket.fr',founded:'2014',employees:'700+',funding:'€450M',stage:'Licorne',description:"Marketplace leader du reconditionné en Europe : smartphones, PC, tablettes, électroménager. 6M+ clients, 2 500+ marchands professionnels, présent dans 18 pays.",hook:'Reconditionné = économie circulaire + finance de l\'occasion = angle Business Dev B2B vers marchands',marketType:'hidden',keyPeople:[{name:'Thibaud Hug de Larauze',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/thibauddelarauze',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Licorne. Équipe Sales B2B vers marchands professionnels.'}),
+
+  mkCompany({id:1202,name:'ManoMano',sector:'Scale-up Tech',website:'manomano.fr',founded:'2013',employees:'800+',funding:'€300M',stage:'Licorne',description:"Marketplace spécialisée bricolage, jardinage, maison. 3 500+ marchands partenaires, 50M+ produits. Présent dans 6 pays européens.",hook:'',marketType:'hidden',keyPeople:[{name:'Christian Raisson',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/christianraisson',email:'',phone:''}],priority:'low',notes:'French Tech 120. Licorne.'}),
+
+  mkCompany({id:1203,name:'Vestiaire Collective',sector:'Luxe & Retail',website:'vestiairecollective.com',founded:'2009',employees:'700+',funding:'€330M',stage:'Licorne',description:"Marketplace premium de mode de seconde main. 23M+ membres, 150+ pays. Partenariats avec grands groupes luxe (Kering, etc.).",hook:'Expérience Cheval Blanc Paris / Louis Vuitton — univers luxe partagé, crédibilité dans leurs codes',marketType:'hidden',keyPeople:[{name:'Maximilian Bittner',role:'CEO',linkedin:'linkedin.com/in/maximilianbittner',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Licorne. Accroche luxe via Cheval Blanc.'}),
+
+  mkCompany({id:1204,name:'Mirakl',sector:'Scale-up Tech',website:'mirakl.com',founded:'2012',employees:'900+',funding:'€450M',stage:'Licorne',description:"Plateforme SaaS marketplace B2B leader mondial. Permet aux entreprises de créer et opérer leurs propres marketplaces. 400+ clients : Carrefour, Leroy Merlin, Decathlon.",hook:'',marketType:'hidden',keyPeople:[{name:'Philippe Corrot',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/philippecorrot',email:'',phone:''},{name:'Adrien Nussenbaum',role:'Co-CEO',linkedin:'linkedin.com/in/adriennussenbaum',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Licorne. Vente enterprise B2B long cycle.'}),
+
+  mkCompany({id:1205,name:'Ankorstore',sector:'Scale-up Tech',website:'ankorstore.com',founded:'2019',employees:'400+',funding:'€250M',stage:'Scale-up',description:"Marketplace B2B de gros : connecte marques indépendantes et commerces de proximité en Europe. Financement des commandes intégré.",hook:'B2B marketplace + financement intégré = intersection Fintech + Commerce',marketType:'hidden',keyPeople:[{name:'Nicolas d\'Audiffret',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/nicolasdaudiffret',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Pure B2B marketplace.'}),
+
+  mkCompany({id:1206,name:'BlaBlaCar',sector:'Scale-up Tech',website:'blablacar.com',founded:'2006',employees:'900+',funding:'€700M',stage:'Licorne',description:"Plateforme de covoiturage longue distance. 100M+ membres, 21 pays. Diversification vers bus et abonnement.",hook:'',marketType:'hidden',keyPeople:[{name:'Nicolas Brusson',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/nicolasbrusson',email:'',phone:''}],priority:'low',notes:'French Tech 120. Licorne historique.'}),
+
+  mkCompany({id:1207,name:'Contentsquare',sector:'Scale-up Tech',website:'contentsquare.com',founded:'2012',employees:'2 000+',funding:'$1.4B',stage:'Licorne',description:"Plateforme d'analytics d'expérience digitale. Analyse le comportement des utilisateurs sur web et apps pour optimiser la conversion.",hook:'',marketType:'hidden',keyPeople:[{name:'Jonathan Cherki',role:'CEO & Fondateur',linkedin:'linkedin.com/in/jonathancherki',email:'',phone:''}],priority:'low',notes:'French Tech 120. Grande structure, recrutement très formalisé.'}),
+
+  mkCompany({id:1208,name:'Veepee',sector:'Luxe & Retail',website:'veepee.com',founded:'2001',employees:'5 000+',funding:'IPO / coté',stage:'Grand Groupe',description:"Pionnier des ventes événementielles privées en ligne. 72M membres, 7 000+ marques partenaires, présent dans 14 pays européens.",hook:'',marketType:'hidden',priority:'low',notes:'Groupe corporate historique, peu adapté à une alternance startup.'}),
+
+  mkCompany({id:1209,name:'Channable',sector:'Scale-up Tech',website:'channable.com',founded:'2015',employees:'300+',funding:'€35M',stage:'Scale-up',description:"Plateforme de gestion de flux produits pour e-commerce (Google Shopping, Amazon, Bol.com). Automatisation marketing digital B2B.",hook:'',marketType:'hidden',priority:'low',notes:'Scale-up néerlandaise, bureau Paris.'}),
+
+  // ===== DEEPTECH & IA (nouveaux) =====
+  mkCompany({id:1301,name:'Mistral AI',sector:'Scale-up Tech',website:'mistral.ai',founded:'2023',employees:'200+',funding:'€1.05B',stage:'Licorne',description:"Startup IA française développant des LLMs open-source (Mistral 7B, Mixtral) et modèles propriétaires. Valorisée $6B. Principale alternative européenne à OpenAI.",hook:'Tu utilises leurs modèles via les outils IA du quotidien — familiarité produit réelle',marketType:'hidden',keyPeople:[{name:'Arthur Mensch',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/arthurmensch',email:'',phone:''},{name:'Guillaume Lample',role:'Co-fondateur',linkedin:'',email:'',phone:''},{name:'Timothée Lacroix',role:'Co-fondateur',linkedin:'',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Licorne. Business Dev vers entreprises B2B (Le Chat Enterprise) = bon profil.'}),
+
+  mkCompany({id:1302,name:'Hugging Face',sector:'Scale-up Tech',website:'huggingface.co',founded:'2016',employees:'300+',funding:'$395M',stage:'Licorne',description:"Plateforme open-source IA/ML : hub de modèles, datasets, outils. Appelé le \"GitHub de l'IA\". 50 000+ modèles, 1M+ utilisateurs actifs.",hook:'Tu utilises leur infrastructure via les outils IA quotidiens — légitimité utilisateur',marketType:'hidden',keyPeople:[{name:'Clément Delangue',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/clementdelangue',email:'',phone:''}],priority:'low',notes:'Licorne franco-américaine. Siège New York. Très technique.'}),
+
+  mkCompany({id:1303,name:'Poolside',sector:'Scale-up Tech',website:'poolside.ai',founded:'2023',employees:'100+',funding:'$500M',stage:'Scale-up',description:"IA spécialisée dans la génération et compréhension de code. Co-fondée par un Français. Vise le marché B2B développement logiciel.",hook:'',marketType:'hidden',keyPeople:[{name:'Jason Warner',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/jasonwarner',email:'',phone:''}],priority:'low',notes:'Très jeune et très technique. Peu de fit Business Dev junior.'}),
+
+  mkCompany({id:1304,name:'Pasqal',sector:'Scale-up Tech',website:'pasqal.com',founded:'2019',employees:'200+',funding:'€100M',stage:'Scale-up',description:"Ordinateur quantique à base d'atomes neutres. Applications B2B : finance, énergie, pharma. Partenariats GENCI et EDF.",hook:'',marketType:'hidden',keyPeople:[{name:'Georges-Olivier Reymond',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/georgesolivierreymond',email:'',phone:''}],priority:'low',notes:'French Tech 120. Très early/deeptech.'}),
+
+  mkCompany({id:1305,name:'Dust',sector:'Scale-up Tech',website:'dust.tt',founded:'2022',employees:'30+',funding:'€5M',stage:'Startup',description:"Assistant IA d'entreprise connecté aux outils internes (Notion, Slack, GitHub, etc.). Aide les équipes à accéder à leur knowledge base via langage naturel.",hook:'Tu utilises des outils IA quotidiennement = familiarité produit réelle et authentique',marketType:'hidden',keyPeople:[{name:'Stanislas Polu',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/stanislaspolu',email:'',phone:''}],priority:'low',notes:'Très early. Fondateurs ex-OpenAI (spécialistes reasoning).'}),
+
+  mkCompany({id:1306,name:'LightOn',sector:'Scale-up Tech',website:'lighton.ai',founded:'2016',employees:'80+',funding:'€30M',stage:'Startup',description:"IA générative souveraine pour entreprises. Déploiement de LLMs en environnement privé (on-premise ou cloud privé). Clients : banques, assurances, défense.",hook:'',marketType:'hidden',priority:'low',notes:'Focus marchés réglementés.'}),
+
+  mkCompany({id:1307,name:'Siquance',sector:'Scale-up Tech',website:'siquance.com',founded:'2021',employees:'50+',funding:'€10M',stage:'Startup',description:"Spin-off CEA développant des qubits en silicium CMOS. Vise l'intégration de l'informatique quantique dans les puces standards.",hook:'',marketType:'hidden',priority:'low',notes:'Deep deeptech. Très early.'}),
+
+  mkCompany({id:1308,name:'Grapheal',sector:'Scale-up Tech',website:'grapheal.com',founded:'2018',employees:'30+',funding:'€8M',stage:'Startup',description:"Biosenseurs à base de graphène pour diagnostics médicaux rapides. Pansement connecté de suivi des plaies chroniques.",hook:'',marketType:'hidden',priority:'low',notes:'MedTech deep tech. Peu de fit Business Dev classique.'}),
+
+  // ===== GREENTECH, ENERGIE & INDUSTRIE (nouveaux) =====
+  mkCompany({id:1401,name:'EcoVadis',sector:'Greentech / Industrie',website:'ecovadis.com',founded:'2007',employees:'1 500+',funding:'€500M',stage:'Licorne',description:"Plateforme de notation RSE/ESG pour chaînes d'approvisionnement. 130 000+ entreprises évaluées dans 200+ pays. SaaS B2B pour grands comptes.",hook:'RSE + Finance durable = intersection parfaite pour un profil Finance/Business Dev',marketType:'hidden',keyPeople:[{name:'Pierre-François Thaler',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/pierrefrancoisthaler',email:'',phone:''},{name:'Frédéric Trinel',role:'Co-fondateur',linkedin:'',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Licorne. Vente B2B enterprise complexe à équipes achats et RSE.'}),
+
+  mkCompany({id:1402,name:'Verkor',sector:'Greentech / Industrie',website:'verkor.com',founded:'2020',employees:'500+',funding:'€2.6B',stage:'Scale-up',description:"Gigafactory de batteries basse empreinte carbone à Dunkerque. Fournisseur Renault, EDF. Production prévue 2025 : 16 GWh/an.",hook:'',marketType:'hidden',keyPeople:[{name:'Benoît Lemaignan',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/benoitlemaignan',email:'',phone:''}],priority:'low',notes:'French Tech 120. Industriel lourd. Peu de postes Business Dev juniors.'}),
+
+  mkCompany({id:1403,name:'Exotec',sector:'Greentech / Industrie',website:'exotec.com',founded:'2015',employees:'700+',funding:'€335M',stage:'Licorne',description:"Robotique d'entrepôt (système Skypod). Automatisation logistique pour retailers. Clients : Decathlon, Carrefour, Galeries Lafayette.",hook:'',marketType:'hidden',keyPeople:[{name:'Romain Moulin',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/romainmoulin',email:'',phone:''},{name:'Renaud Heitz',role:'CTO & Co-fondateur',linkedin:'',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Licorne. Vente B2B complexe cycles 6-12 mois.'}),
+
+  mkCompany({id:1404,name:'InnovaFeed',sector:'Greentech / Industrie',website:'innovafeed.com',founded:'2016',employees:'300+',funding:'€250M',stage:'Scale-up',description:"Production de protéines d'insectes (mouche soldat noire) pour alimentation animale et aquaculture. Partenariat stratégique Cargill et TotalEnergies.",hook:'',marketType:'hidden',keyPeople:[{name:'Damien Goutx',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/damiengoutx',email:'',phone:''}],priority:'low',notes:'French Tech 120. Deep agri-tech.'}),
+
+  mkCompany({id:1405,name:'Ynsect',sector:'Greentech / Industrie',website:'ynsect.com',founded:'2011',employees:'300+',funding:'€425M',stage:'Scale-up',description:"Production industrielle de protéines et engrais naturels à base d'insectes (ténébrion meunier). Première ferme verticale insectes au monde.",hook:'',marketType:'hidden',keyPeople:[{name:'Antoine Hubert',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/antoinehubert',email:'',phone:''}],priority:'low',notes:'French Tech 120.'}),
+
+  mkCompany({id:1406,name:'Accenta',sector:'Greentech / Industrie',website:'accenta.ai',founded:'2019',employees:'50+',funding:'€15M',stage:'Startup',description:"SaaS IA d'optimisation énergétique pour bâtiments tertiaires. Prédit et réduit jusqu'à 30% la consommation en chauffage/climatisation.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:1407,name:'Deepki',sector:'Greentech / Industrie',website:'deepki.com',founded:'2014',employees:'300+',funding:'€150M',stage:'Scale-up',description:"SaaS ESG pour l'immobilier. Collecte et analyse données énergie et carbone des bâtiments pour aider foncières et asset managers à décarboner.",hook:'Finance immobilière + ESG = profil Finance pertinent pour leur équipe Sales',marketType:'hidden',keyPeople:[{name:'Vincent Bryant',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/vincentbryant',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Vente B2B vers asset managers et foncières.'}),
+
+  mkCompany({id:1408,name:'Electra',sector:'Greentech / Industrie',website:'electra.site',founded:'2021',employees:'200+',funding:'€300M',stage:'Scale-up',description:"Réseau de bornes de recharge ultra-rapide (150-400kW) pour véhicules électriques. 400+ stations déployées ou en cours. Modèle B2B vers gestionnaires de parkings.",hook:'',marketType:'hidden',keyPeople:[{name:'Aurélien de Meaux',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/aureliendemeaux',email:'',phone:''}],priority:'medium',notes:'Forte croissance. Vente B2B vers collectivités, parkings, centres commerciaux.'}),
+
+  mkCompany({id:1409,name:'Be-Ev',sector:'Greentech / Industrie',website:'be-ev.fr',founded:'2020',employees:'100+',funding:'€30M',stage:'Startup',description:"Opérateur de bornes de recharge EV en France. Installe et exploite des stations dans espaces publics et copropriétés.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:1410,name:'Ilek',sector:'Greentech / Industrie',website:'ilek.fr',founded:'2017',employees:'100+',funding:'€20M',stage:'Startup',description:"Fournisseur d'électricité et gaz 100% renouvelable avec lien direct producteur-consommateur. Offres B2C et B2B TPE/PME.",hook:'',marketType:'hidden',priority:'low'}),
+
+  // ===== HEALTHTECH & BIOTECH (nouveaux) =====
+  mkCompany({id:1501,name:'Doctolib',sector:'SaaS B2B',website:'doctolib.fr',founded:'2013',employees:'3 000+',funding:'€500M',stage:'Licorne',description:"Leader de la prise de RDV médicaux en ligne. SaaS B2B pour professionnels de santé (cabinets, cliniques, hôpitaux). 80M patients, 300 000+ praticiens.",hook:'SaaS B2B avec force de vente massive + hypercroissance = bon terrain Business Dev alternant',marketType:'hidden',keyPeople:[{name:'Stanislas Niox-Chateau',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/stanislasnioxchateau',email:'',phone:''},{name:'Ivan Schneider',role:'CTO & Co-fondateur',linkedin:'',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Licorne. Équipe commerciale très importante, bon pour alternance BizDev.'}),
+
+  mkCompany({id:1502,name:'DNA Script',sector:'Scale-up Tech',website:'dnascript.co',founded:'2014',employees:'200+',funding:'€200M',stage:'Scale-up',description:"Synthèse enzymatique d'ADN. Machine SYNTAX permettant la production d'oligonucléotides sur site en quelques heures. B2B pharma et recherche.",hook:'',marketType:'hidden',keyPeople:[{name:'Thomas Ybert',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/thomasybert',email:'',phone:''}],priority:'low',notes:'French Tech 120. Deep biotech.'}),
+
+  mkCompany({id:1503,name:'Lifen',sector:'SaaS B2B',website:'lifen.fr',founded:'2015',employees:'200+',funding:'€50M',stage:'Scale-up',description:"Plateforme d'interopérabilité et échange de données de santé. Digitalise et sécurise la communication entre professionnels de santé.",hook:'',marketType:'hidden',priority:'low',notes:'B2B santé. Marché réglementé.'}),
+
+  mkCompany({id:1504,name:'Withings',sector:'Scale-up Tech',website:'withings.com',founded:'2008',employees:'300+',funding:'€200M',stage:'Scale-up',description:"Appareils de santé connectés grand public : balance, tensiomètre, montre santé, analyseur de sommeil. Pionnier de la healthtech hardware.",hook:'',marketType:'hidden',keyPeople:[{name:'Eric Carreel',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/ericcarreel',email:'',phone:''}],priority:'low',notes:'Principalement B2C.'}),
+
+  mkCompany({id:1505,name:'ImCheck Therapeutics',sector:'Scale-up Tech',website:'imcheck.fr',founded:'2018',employees:'100+',funding:'€75M',stage:'Startup',description:"Biotech développant des anticorps monoclonaux contre les gamma-delta T pour l'oncologie. Phase clinique en cours.",hook:'',marketType:'hidden',priority:'low',notes:'Pure biotech recherche.'}),
+
+  mkCompany({id:1506,name:'Tissium',sector:'Scale-up Tech',website:'tissium.com',founded:'2017',employees:'50+',funding:'€30M',stage:'Startup',description:"Biomatériaux programmables pour la réparation tissulaire. Applications neurologie, cardiovasculaire, reconstructif.",hook:'',marketType:'hidden',priority:'low',notes:'Deep biotech matériaux.'}),
+
+  // ===== LOGISTIQUE, MOBILITE & TELECOM (nouveaux) =====
+  mkCompany({id:1601,name:'Shippeo',sector:'Scale-up Tech',website:'shippeo.com',founded:'2014',employees:'200+',funding:'€30M',stage:'Scale-up',description:"Plateforme de visibilité en temps réel de la supply chain. Track & trace des expéditions B2B pour industriels et distributeurs.",hook:'',marketType:'hidden',keyPeople:[{name:'Pierre Khoury',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/pierrekhoury',email:'',phone:''}],priority:'low',notes:'French Tech 120.'}),
+
+  mkCompany({id:1602,name:'Virtuo',sector:'Scale-up Tech',website:'govirtuo.com',founded:'2016',employees:'200+',funding:'€50M',stage:'Scale-up',description:"Location de voiture 100% mobile sans agence ni paperasse. App only. Partenariats hôtels, aéroports, entreprises.",hook:'Expérience hôtellerie (Cheval Blanc, Ibis) = clientèle partenaire similaire à leurs B2B',marketType:'hidden',keyPeople:[{name:'Karim Kaddoura',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/karimkaddoura',email:'',phone:''}],priority:'low'}),
+
+  mkCompany({id:1603,name:'Libeo',sector:'Fintech',website:'libeo.io',founded:'2019',employees:'100+',funding:'€22M',stage:'Scale-up',description:"Automatisation du paiement des factures fournisseurs B2B. Intégration comptable native. Racheté et intégré à Pennylane.",hook:'Factures fournisseurs = cœur de ma mission Figaro. Produit que j\'aurais eu besoin !',marketType:'hidden',priority:'medium',notes:'Désormais intégré à Pennylane. Mentionner lors des entretiens Pennylane pour montrer la compréhension du marché.'}),
+
+  mkCompany({id:1604,name:'Wifirst',sector:'SaaS B2B',website:'wifirst.fr',founded:'2002',employees:'200+',funding:'€60M',stage:'Scale-up',description:"Opérateur WiFi B2B pour l'hôtellerie, résidences étudiantes et logements gérés. 1M+ chambres équipées, 3 000+ établissements clients.",hook:'FIT DIRECT : cible hôtellerie-restauration = mon secteur de formation BTS MHR + Ibis Styles + Jardins de Bakea',marketType:'hidden',keyPeople:[{name:'Jérôme Bloch',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/jeromebloch',email:'',phone:''}],priority:'high',notes:'Fit exceptionnel : leur ICP (Ideal Customer Profile) = les établissements dans lesquels j\'ai travaillé. Accroche ultra concrète.'}),
+
+  mkCompany({id:1605,name:'Zeplug',sector:'Greentech / Industrie',website:'zeplug.com',founded:'2015',employees:'100+',funding:'€20M',stage:'Scale-up',description:"Déploiement de bornes de recharge EV dans parkings résidentiels et copropriétés. Modèle B2B vers syndics et bailleurs sociaux.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:1606,name:'Flying Whales',sector:'Greentech / Industrie',website:'flying-whales.com',founded:'2012',employees:'200+',funding:'€122M',stage:'Scale-up',description:"Développement du LCA60T : dirigeable cargo lourd (60 tonnes) pour zones isolées sans infrastructure. Clients : industrie forestière, énergie, télécoms.",hook:'',marketType:'hidden',keyPeople:[{name:'Sébastien Bougon',role:'CEO & Fondateur',linkedin:'linkedin.com/in/sebastienbougon',email:'',phone:''}],priority:'low',notes:'French Tech 120. Très industriel et défense.'}),
+
+  // ===== +20 FINTECH =====
+  mkCompany({id:2001,name:'Lyanne',sector:'Fintech',website:'lyanne.fr',founded:'2022',employees:'50+',funding:'€8M',stage:'Startup',description:"Courtier assurance 100% digital pour particuliers et PME. Comparaison et souscription en ligne de mutuelles santé, prévoyance et pro.",hook:'Assurance B2B PME = cycle de vente semblable à l\'Ingénieur d\'Affaires',marketType:'hidden',priority:'medium',notes:'Startup en forte croissance. Équipe Sales à recruter.'}),
+
+  mkCompany({id:2002,name:'Cashbee',sector:'Fintech',website:'cashbee.fr',founded:'2019',employees:'30+',funding:'€5M',stage:'Startup',description:"Application d'épargne et placement simple : Livret A, LDDS, compte à terme, fonds euros. 200 000+ utilisateurs actifs.",hook:'Investissement perso en bourse = intérêt authentique pour leur produit',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2003,name:'Soltéa',sector:'Fintech',website:'soltea.fr',founded:'2022',employees:'30+',funding:'€10M',stage:'Startup',description:"Plateforme B2B de gestion et paiement des cotisations sociales pour TPE/artisans. Simplifie l'URSSAF et les charges patronales.",hook:'Gestion sociale B2B + comptabilité = lien direct avec ma mission Figaro',marketType:'hidden',priority:'medium'}),
+
+  mkCompany({id:2004,name:'Aria',sector:'Fintech',website:'usearia.com',founded:'2021',employees:'40+',funding:'€15M',stage:'Startup',description:"Financement des créances B2B en temps réel (affacturage instantané). Permet aux PME d'être payées immédiatement dès émission de facture.",hook:'Créances B2B et délais de paiement = exactement ce que j\'optimisais au Figaro (-20% délais)',marketType:'hidden',priority:'high',notes:'Pitch parfait : "J\'ai réduit de 20% les délais de traitement des créances au Figaro — votre produit aurait divisé ce chiffre encore."'}),
+
+  mkCompany({id:2005,name:'Karmen',sector:'Fintech',website:'karmen.co',founded:'2021',employees:'30+',funding:'€50M',stage:'Startup',description:"Revenue-based financing B2B pour SaaS et e-commerce. Analyse les revenus récurrents pour proposer un financement non-dilutif en 48h.",hook:'',marketType:'hidden',priority:'medium',notes:'Concurrent direct de Silvr et Defacto.'}),
+
+  mkCompany({id:2006,name:'Fiduceo',sector:'Fintech',website:'fiduceo.com',founded:'2010',employees:'80+',funding:'€20M',stage:'Scale-up',description:"Agrégateur de comptes bancaires et moteur de catégorisation des transactions par IA. API B2B pour banques et fintechs européennes.",hook:'',marketType:'hidden',priority:'low',notes:'Infrastructure fintech B2B.'}),
+
+  mkCompany({id:2007,name:'Legalstart',sector:'Fintech',website:'legalstart.fr',founded:'2012',employees:'200+',funding:'€25M',stage:'Scale-up',description:"Plateforme LegalTech : création d'entreprise, statuts, protection marque, comptabilité en ligne. SaaS B2B pour TPE/freelances.",hook:'Création d\'entreprise = Glass Fragments expérience fondateur + comptabilité Figaro',marketType:'hidden',priority:'medium',notes:'LegalTech + Finance. Accroche entrepreneuriale forte.'}),
+
+  mkCompany({id:2008,name:'Mansa',sector:'Fintech',website:'mansa.co',founded:'2019',employees:'40+',funding:'€10M',stage:'Startup',description:"Crédit instantané et assurance pour indépendants et freelances. Alternative aux banques traditionnelles réticentes aux profils non-salariés.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2009,name:'Floa',sector:'Fintech',website:'floa.bank',founded:'2001',employees:'400+',funding:'Filiale BNP Paribas',stage:'Grand Groupe',description:"Banque de financement du consommateur : BNPL, crédit revolving, cartes co-brandées. Filiale BNP Paribas. Partenariats e-commerce et retail.",hook:'BNPL B2B + partenariats retail = cycle de vente technico-commercial',marketType:'hidden',keyPeople:[{name:'Matthieu Pasquier',role:'CEO',linkedin:'linkedin.com/in/matthieupasquier',email:'',phone:''}],priority:'medium',notes:'Filiale BNP → structure plus corporate mais grande taille d\'équipe Sales.'}),
+
+  mkCompany({id:2010,name:'Paylead',sector:'Fintech',website:'paylead.fr',founded:'2016',employees:'60+',funding:'€15M',stage:'Scale-up',description:"Data marketing bancaire : analyse des transactions clients pour proposer du cashback ciblé. B2B vers banques et retailers.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2011,name:'Treezor',sector:'Fintech',website:'treezor.com',founded:'2016',employees:'200+',funding:'Acquis Société Générale',stage:'Scale-up',description:"Banking-as-a-Service : infrastructure bancaire en API (IBAN, cartes, virements, KYC). Moteur technique de 80+ fintechs européennes.",hook:'Infrastructure qui alimente les produits que je prospecte = compréhension technique valorisable',marketType:'hidden',keyPeople:[{name:'Eric Lassus',role:'CEO',linkedin:'linkedin.com/in/ericlassus',email:'',phone:''}],priority:'medium',notes:'BaaS technique. Filiale SG.'}),
+
+  mkCompany({id:2012,name:'Memo Bank',sector:'Fintech',website:'memo.bank',founded:'2017',employees:'150+',funding:'€30M',stage:'Scale-up',description:"Banque d'affaires pour PME françaises. Vraie licence bancaire, conseillers dédiés, pricing transparent. Alternative premium aux néobanques.",hook:'Financement PME + expertise finance = double profil pertinent',marketType:'hidden',keyPeople:[{name:'Ben Everaert',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/beneveraert',email:'',phone:''}],priority:'medium'}),
+
+  mkCompany({id:2013,name:'Scaleway',sector:'Fintech',website:'scaleway.com',founded:'1999',employees:'700+',funding:'Filiale Iliad',stage:'Grand Groupe',description:"Cloud souverain européen : serveurs, stockage, IA. Filiale du groupe Iliad (Free). Alternative à AWS pour le marché européen.",hook:'',marketType:'hidden',priority:'low',notes:'Profil plus tech/infra que finance.'}),
+
+  mkCompany({id:2014,name:'Hellowork',sector:'Fintech',website:'hellowork.com',founded:'2006',employees:'300+',funding:'€60M',stage:'Scale-up',description:"Groupe media & RH : job board, logiciels RH et paie pour PME. Partenaire France Travail.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2015,name:'Nalo',sector:'Fintech',website:'nalo.fr',founded:'2017',employees:'80+',funding:'€15M',stage:'Scale-up',description:"Robo-advisor : gestion de patrimoine en ligne personnalisée. Assurance-vie et PEA optimisés par algorithme. 10 000+ clients.",hook:'Investissement perso en bourse + gestion de portefeuille = client naturel de leur produit',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2016,name:'Luko',sector:'Fintech',website:'luko.eu',founded:'2018',employees:'200+',funding:'€60M',stage:'Scale-up',description:"Assurance habitation néo-insurtech. Application + prix bas + expérience sinistre fluide. Modèle de redistribution des bénéfices aux assurés.",hook:'',marketType:'hidden',keyPeople:[{name:'Raphaël Vullierme',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/raphaelvullierme',email:'',phone:''}],priority:'low',notes:'En cours de rachat par Allianz (2024).'}),
+
+  mkCompany({id:2017,name:'Meilleurtaux',sector:'Fintech',website:'meilleurtaux.com',founded:'1999',employees:'1 500+',funding:'Coté Euronext',stage:'Grand Groupe',description:"Courtier en ligne : crédit immobilier, assurance, épargne, énergie. Leader français de la comparaison et courtage multi-produits.",hook:'',marketType:'hidden',priority:'low',notes:'Groupe corporate historique.'}),
+
+  mkCompany({id:2018,name:'Payplug',sector:'Fintech',website:'payplug.com',founded:'2012',employees:'200+',funding:'Filiale Natixis',stage:'Scale-up',description:"Solution de paiement en ligne et en magasin pour PME françaises. Terminal de paiement, page de paiement, lien de paiement. Filiale Natixis.",hook:'Paiement B2B PME = lien direct avec gestion facturation Figaro',marketType:'hidden',keyPeople:[{name:'Camille Tyan',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/camilletyan',email:'',phone:''}],priority:'medium'}),
+
+  mkCompany({id:2019,name:'Bankin\'',sector:'Fintech',website:'bankin.com',founded:'2011',employees:'80+',funding:'€30M',stage:'Scale-up',description:"Agrégateur bancaire et gestion de budget personnel. 5M+ utilisateurs. Fonctionnalité de catégorisation et analyse des dépenses.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2020,name:'Budget Insight',sector:'Fintech',website:'budget-insight.com',founded:'2012',employees:'100+',funding:'Acquis Powens / Banque Postale',stage:'Scale-up',description:"Open banking B2B : agrégation de comptes bancaires en API pour fintech, banques et assureurs. Ex-Budget Insight, rebrandé Powens.",hook:'Infrastructure open banking = comprendre la plomberie derrière les produits que je vends',marketType:'hidden',priority:'low',notes:'Rebrandé Powens depuis 2022.'}),
+
+  // ===== +20 SAAS B2B =====
+  mkCompany({id:2101,name:'Sellsy',sector:'SaaS B2B',website:'sellsy.com',founded:'2009',employees:'200+',funding:'€22M',stage:'Scale-up',description:"Suite CRM + facturation + gestion commerciale tout-en-un pour PME françaises. Concurrent HubSpot sur le segment SMB français.",hook:'CRM = l\'outil dans lequel je travaille chaque jour pour ma prospection',marketType:'hidden',keyPeople:[{name:'Frédéric Coulais',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/fredericcoulais',email:'',phone:''}],priority:'medium',notes:'Accroche : "Je suis votre ICP idéal — futur commercial qui cherche son CRM alternance."'}),
+
+  mkCompany({id:2102,name:'Ringover',sector:'SaaS B2B',website:'ringover.com',founded:'2005',employees:'300+',funding:'€32M',stage:'Scale-up',description:"Téléphonie cloud B2B avec intégration CRM native (HubSpot, Salesforce, Pipedrive). Concurrent Aircall. 10 000+ clients.",hook:'Outil utilisé par les équipes Sales = comprendre le quotidien de mes futurs clients',marketType:'hidden',keyPeople:[{name:'Renaud Franch',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/renaudfranch',email:'',phone:''}],priority:'medium',notes:'Concurrent direct d\'Aircall. Bon fit Sales B2B.'}),
+
+  mkCompany({id:2103,name:'Pennylane',sector:'SaaS B2B',website:'pennylane.com',founded:'2020',employees:'350+',funding:'€100M',stage:'Scale-up',description:"Logiciel comptabilité et finance pour TPE/PME et experts-comptables. (Déjà dans le pipeline Fintech.)",hook:'',marketType:'hidden',priority:'high',notes:'Doublon intentionnel — aussi classifiable SaaS B2B. Se référer à la fiche Fintech.'}),
+
+  mkCompany({id:2104,name:'Indy',sector:'SaaS B2B',website:'indy.fr',founded:'2016',employees:'150+',funding:'€28M',stage:'Scale-up',description:"Comptabilité automatisée pour indépendants (auto-entrepreneurs, professions libérales). IA qui catégorise et déclare automatiquement.",hook:'Compta automatisée = vision complémentaire à mon expérience Figaro (processus manuels à automatiser)',marketType:'hidden',keyPeople:[{name:'Thibault Deloeil',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/thibaultdeloeil',email:'',phone:''}],priority:'medium'}),
+
+  mkCompany({id:2105,name:'Qwaiting',sector:'SaaS B2B',website:'qwaiting.com',founded:'2019',employees:'30+',funding:'€2M',stage:'Startup',description:"Logiciel de gestion des files d\'attente et rendez-vous pour enseignes physiques et administrations. Interface tablette + app client.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2106,name:'Livestorm',sector:'SaaS B2B',website:'livestorm.co',founded:'2016',employees:'150+',funding:'€30M',stage:'Scale-up',description:"Plateforme de webinaires et événements virtuels B2B. Intégration CRM native. Concurrence Zoom Webinar et ON24.",hook:'',marketType:'hidden',keyPeople:[{name:'Gilles Bertaux',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/gillesbertaux',email:'',phone:''}],priority:'medium',notes:'SaaS B2B avec cycle de vente moyen. Bon fit profil commercial.'}),
+
+  mkCompany({id:2107,name:'Brevo',sector:'SaaS B2B',website:'brevo.com',founded:'2012',employees:'800+',funding:'€180M',stage:'Scale-up',description:"Suite marketing automation & CRM : email, SMS, WhatsApp, push notifications. Ancien Sendinblue. 500 000+ clients dans 180 pays.",hook:'Marketing automation + email = outils que tout Sales B2B utilise au quotidien',marketType:'hidden',keyPeople:[{name:'Armand Thiberge',role:'CEO & Fondateur',linkedin:'linkedin.com/in/armandthiberge',email:'',phone:''}],priority:'medium',notes:'French Tech 120. Forte équipe Sales internationale.'}),
+
+  mkCompany({id:2108,name:'Talkdesk',sector:'SaaS B2B',website:'talkdesk.com',founded:'2011',employees:'1 500+',funding:'$498M',stage:'Licorne',description:"Plateforme cloud de centre de contact (CCaaS). IA pour automatiser la relation client. Clients : grands comptes et ETI.",hook:'',marketType:'hidden',priority:'low',notes:'Licorne américaine avec bureau Paris.'}),
+
+  mkCompany({id:2109,name:'Bloomreach',sector:'SaaS B2B',website:'bloomreach.com',founded:'2009',employees:'900+',funding:'$425M',stage:'Licorne',description:"Plateforme de commerce expérientiel : personnalisation IA, moteur de recherche, marketing automation pour e-commerce.",hook:'',marketType:'hidden',priority:'low',notes:'Américain avec bureau Paris. Très technique.'}),
+
+  mkCompany({id:2110,name:'Claap',sector:'SaaS B2B',website:'claap.io',founded:'2021',employees:'30+',funding:'€5M',stage:'Startup',description:"Outil de collaboration asynchrone par vidéo pour équipes commerciales et Product. Remplace les réunions inutiles.",hook:'',marketType:'hidden',priority:'low',notes:'Startup early stage.'}),
+
+  mkCompany({id:2111,name:'Modjo',sector:'SaaS B2B',website:'modjo.ai',founded:'2019',employees:'80+',funding:'€10M',stage:'Startup',description:"Revenue Intelligence : analyse automatique des calls commerciaux par IA pour coacher les équipes Sales. Concurrent Gong.",hook:'Analyser mes propres appels commerciaux = outil que j\'utiliserais en alternance',marketType:'hidden',keyPeople:[{name:'Paul Berloty',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/paulberloty',email:'',phone:''}],priority:'high',notes:'Fit parfait : cible les équipes Sales en croissance. Pitch : "Je veux rejoindre l\'équipe qui coache les Sales avec l\'IA."'}),
+
+  mkCompany({id:2112,name:'Notion',sector:'SaaS B2B',website:'notion.so',founded:'2016',employees:'500+',funding:'$343M',stage:'Licorne',description:"Workspace tout-en-un : notes, docs, bases de données, gestion de projet. 30M+ utilisateurs. Devenu référence de la productivité B2B.",hook:'Tu utilises Notion au quotidien = utilisateur expert = argument crédible pour vendre le produit',marketType:'hidden',priority:'low',notes:'Américain, bureau Paris. Bonne culture sales.'}),
+
+  mkCompany({id:2113,name:'Planhat',sector:'SaaS B2B',website:'planhat.com',founded:'2015',employees:'100+',funding:'€45M',stage:'Scale-up',description:"Plateforme Customer Success : suivi de la santé client, NPS, onboarding, expansion revenue. B2B SaaS.",hook:'',marketType:'hidden',priority:'low',notes:'Suédois avec bureau Paris. Customer Success.'}),
+
+  mkCompany({id:2114,name:'Sinch',sector:'SaaS B2B',website:'sinch.com',founded:'2008',employees:'3 000+',funding:'$1.2B',stage:'Grand Groupe',description:"Plateforme de communication cloud B2B : SMS, voix, vidéo, email, WhatsApp en API. 150 000+ entreprises clientes.",hook:'',marketType:'hidden',priority:'low',notes:'Suédois coté. Bureau Paris.'}),
+
+  mkCompany({id:2115,name:'HubSpot',sector:'SaaS B2B',website:'hubspot.com',founded:'2006',employees:'7 000+',funding:'IPO Nasdaq',stage:'Grand Groupe',description:"Suite CRM inbound marketing leader. Sales Hub, Marketing Hub, Service Hub. Standard de l'industrie pour PME et ETI.",hook:'Je construis mon pipeline dans un CRM similaire au leur = compréhension produit native',marketType:'hidden',priority:'medium',notes:'Bureau Paris en forte croissance. Excellent programme alternants.'}),
+
+  mkCompany({id:2116,name:'Salesforce',sector:'SaaS B2B',website:'salesforce.com',founded:'1999',employees:'70 000+',funding:'IPO NYSE',stage:'Grand Groupe',description:"CRM enterprise leader mondial. Écosystème complet : Sales Cloud, Service Cloud, Marketing Cloud, Tableau.",hook:'',marketType:'hidden',priority:'low',notes:'Très corporate. Bon pour CV mais peu d\'opportunités alternance BizDev junior direct.'}),
+
+  mkCompany({id:2117,name:'Axonaut',sector:'SaaS B2B',website:'axonaut.com',founded:'2017',employees:'50+',funding:'€5M',stage:'Startup',description:"ERP cloud tout-en-un pour TPE/PME françaises : CRM, facturation, comptabilité, RH, projets. Alternative simple à Salesforce.",hook:'J\'ai utilisé des ERP au Figaro (SAP BO, Basware, Qualiac) = compréhension métier directe',marketType:'hidden',priority:'medium',notes:'Startup toulousaine. Cycle de vente court, équipe Sales en croissance.'}),
+
+  mkCompany({id:2118,name:'Pennylane',sector:'SaaS B2B',website:'pennylane.com',founded:'2020',employees:'350+',funding:'€100M',stage:'Scale-up',description:"Voir fiche Fintech — aussi classifiable SaaS B2B CFO tools.",hook:'',marketType:'hidden',priority:'high',notes:'Référence à la fiche principale.'}),
+
+  mkCompany({id:2119,name:'Slack',sector:'SaaS B2B',website:'slack.com',founded:'2013',employees:'2 500+',funding:'Acquis Salesforce $27.7B',stage:'Grand Groupe',description:"Messagerie et collaboration d'équipe B2B. Intégration avec tout l'écosystème SaaS. Standard communication interne enterprise.",hook:'',marketType:'hidden',priority:'low',notes:'Filiale Salesforce. Très corporate.'}),
+
+  mkCompany({id:2120,name:'Notion',sector:'SaaS B2B',website:'notion.so',founded:'2016',employees:'500+',funding:'$343M',stage:'Licorne',description:"Workspace collaboratif tout-en-un.",hook:'',marketType:'hidden',priority:'low',notes:'Doublon — voir fiche 2112.'}),
+
+  mkCompany({id:2121,name:'Teamleader',sector:'SaaS B2B',website:'teamleader.eu',founded:'2012',employees:'400+',funding:'€60M',stage:'Scale-up',description:"CRM + gestion de projets + facturation pour PME et agences européennes. Concurrent HubSpot sur le segment PME belge et français.",hook:'',marketType:'hidden',priority:'medium'}),
+
+  mkCompany({id:2122,name:'Pipedrive',sector:'SaaS B2B',website:'pipedrive.com',founded:'2010',employees:'900+',funding:'$90M',stage:'Scale-up',description:"CRM visuel orienté pipeline commercial pour équipes Sales PME. 100 000+ clients dans 175 pays.",hook:'Mon CRM de prospection ressemble à leur produit = compréhension utilisateur immédiate',marketType:'hidden',priority:'medium',notes:'Estonien. Bureau Paris. Bon pour apprendre le métier Sales.'}),
+
+  // ===== +20 HOSPITALITY TECH =====
+  mkCompany({id:2201,name:'Lightspeed',sector:'Hospitality Tech',website:'lightspeedhq.com',founded:'2005',employees:'3 000+',funding:'$1.1B, coté NYSE',stage:'Grand Groupe',description:"Logiciel de point de vente cloud pour restaurants, hôtels et retail. Présent dans 100+ pays. 168 000+ établissements clients.",hook:'BTS MHR + expérience restauration terrain = compréhension des besoins de leurs clients ICP',marketType:'hidden',keyPeople:[{name:'Dax Dasilva',role:'CEO & Fondateur',linkedin:'linkedin.com/in/daxdasilva',email:'',phone:''}],priority:'high',notes:'Géant de la restauration tech. Coté en bourse. Excellente école de vente.'}),
+
+  mkCompany({id:2202,name:'TheFork',sector:'Hospitality Tech',website:'thefork.fr',founded:'2007',employees:'800+',funding:'Filiale TripAdvisor',stage:'Grand Groupe',description:"Plateforme de réservation de restaurant numéro 1 en Europe. SaaS pour restaurateurs (gestion réservations, avis, carte digitale). 60 000+ restaurants partenaires.",hook:'J\'ai travaillé dans des restaurants qui utilisent exactement ce produit — Jardins de Bakea, etc.',marketType:'hidden',keyPeople:[{name:'Bertrand Jelensperger',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/bertrandjelensperger',email:'',phone:''}],priority:'high',notes:'Filiale TripAdvisor. Pitch : "J\'ai géré les réservations en salle — votre produit aurait divisé mon temps de gestion."'}),
+
+  mkCompany({id:2203,name:'Elloha',sector:'Hospitality Tech',website:'elloha.com',founded:'2014',employees:'60+',funding:'€5M',stage:'Startup',description:"Plateforme de réservation et de distribution en ligne pour activités touristiques, hébergements et restaurants. Channel manager intégré.",hook:'',marketType:'hidden',priority:'medium'}),
+
+  mkCompany({id:2204,name:'Guestline',sector:'Hospitality Tech',website:'guestline.com',founded:'1991',employees:'300+',funding:'Acquis Access Group',stage:'Grand Groupe',description:"PMS (Property Management System) cloud pour hôtels indépendants et chaînes. Gestion des chambres, tarifs, distribution, check-in.",hook:'BTS MHR option hébergement = compréhension native des PMS hôteliers',marketType:'hidden',priority:'medium',notes:'Référence PMS hôteliers. Accroche BTS hôtellerie forte.'}),
+
+  mkCompany({id:2205,name:'HotelRunner',sector:'Hospitality Tech',website:'hotelrunner.com',founded:'2013',employees:'200+',funding:'€20M',stage:'Scale-up',description:"Plateforme SaaS de gestion et distribution pour hébergements. Channel manager, moteur de réservation, PMS intégré.",hook:'',marketType:'hidden',priority:'medium'}),
+
+  mkCompany({id:2206,name:'Mews',sector:'Hospitality Tech',website:'mews.com',founded:'2012',employees:'1 000+',funding:'€210M',stage:'Scale-up',description:"PMS cloud nouvelle génération pour hôtels. Automatise le check-in, la facturation, la distribution. 5 000+ hôtels dans 85 pays.",hook:'BTS hébergement + expérience Cheval Blanc Paris = connaissance intime des besoins PMS',marketType:'hidden',keyPeople:[{name:'Richard Valtr',role:'CEO & Fondateur',linkedin:'linkedin.com/in/richardvaltr',email:'',phone:''}],priority:'high',notes:'Scale-up très dynamique. Pitch : "J\'ai utilisé des PMS en tant qu\'opérationnel — je comprends les pain points de vos clients."'}),
+
+  mkCompany({id:2207,name:'Amenitiz',sector:'Hospitality Tech',website:'amenitiz.com',founded:'2018',employees:'200+',funding:'€30M',stage:'Scale-up',description:"Suite tout-en-un pour hébergements indépendants : site web, moteur de réservation, channel manager, PMS. Cible B&B et hôtels boutique.",hook:'BTS MHR + Ibis Styles = compréhension des défis de l\'hôtelier indépendant',marketType:'hidden',keyPeople:[{name:'José Vieira',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/josevieira',email:'',phone:''}],priority:'high',notes:'Startup en forte croissance. Équipe Sales B2B en recrutement permanent.'}),
+
+  mkCompany({id:2208,name:'Triptease',sector:'Hospitality Tech',website:'triptease.com',founded:'2015',employees:'200+',funding:'€28M',stage:'Scale-up',description:"Plateforme d'acquisition directe pour hôtels : chatbot, comparateur de prix, campagnes Google. Aide les hôtels à réduire leur dépendance aux OTAs.",hook:'Réduire la dépendance aux OTAs = problème que tout hôtelier veut résoudre',marketType:'hidden',priority:'medium',notes:'Britannique, bureau Paris.'}),
+
+  mkCompany({id:2209,name:'Bowo',sector:'Hospitality Tech',website:'bowo.io',founded:'2016',employees:'40+',funding:'€3M',stage:'Startup',description:"Application mobile guest experience pour hôtels : conciergerie digitale, commandes room service, accès chambres, upsell.",hook:'Expérience Cheval Blanc Paris (clientèle UHNWI) = compréhension des attentes ultra-luxe',marketType:'hidden',priority:'medium',notes:'Startup hôtelière en croissance. Accroche luxury hotel concrète.'}),
+
+  mkCompany({id:2210,name:'Ogust',sector:'Hospitality Tech',website:'ogust.com',founded:'2010',employees:'50+',funding:'€5M',stage:'PME',description:"Logiciel de gestion pour services à domicile et hôtellerie sociale. Planning, facturation, télégestion pour SAAD et résidences services.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2211,name:'Tasty Cloud',sector:'Hospitality Tech',website:'tastycloud.fr',founded:'2015',employees:'40+',funding:'€3M',stage:'Startup',description:"Carte digitale et commande à table via QR code pour restaurants. Intégration caisse et paiement.",hook:'BTS MHR + expérience restauration + Sunday (QR code payment) = triple fit secteur',marketType:'hidden',priority:'medium',notes:'Concurrent direct de Sunday sur la carte digitale.'}),
+
+  mkCompany({id:2212,name:'Adoria',sector:'Hospitality Tech',website:'adoria.fr',founded:'2012',employees:'60+',funding:'€5M',stage:'PME',description:"Logiciel de gestion des achats et stocks pour restauration collective et chaînes de restaurants. ERP restauration.",hook:'ERP restauration = lien direct avec ma maîtrise SAP BO / Basware au Figaro',marketType:'hidden',priority:'medium',notes:'Accroche ERP + restauration = double compétence valorisable.'}),
+
+  mkCompany({id:2213,name:'Tiller',sector:'Hospitality Tech',website:'tillerapp.com',founded:'2014',employees:'150+',funding:'€10M',stage:'Scale-up',description:"Logiciel de caisse iPad pour restaurants et commerces. POS cloud avec analytics, gestion des menus, fidélité. Acquis par SumUp.",hook:'BTS MHR + expérience caisses en restauration = compréhension native du produit',marketType:'hidden',keyPeople:[{name:'Sebastien Serafin',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/sebastienserafin',email:'',phone:''}],priority:'high',notes:'Filiale SumUp. Accroche : "J\'ai géré la caisse au Jardins de Bakea — je connais les limitations des systèmes actuels."'}),
+
+  mkCompany({id:2214,name:'Koust',sector:'Hospitality Tech',website:'koust.net',founded:'2013',employees:'30+',funding:'€2M',stage:'PME',description:"Logiciel de gestion des coûts matières et fiches techniques pour restaurateurs. Calcule le food cost en temps réel.",hook:'Food cost = gestion P&L que j\'ai appris en BTS MHR (analyse rentabilité, budget)',marketType:'hidden',priority:'medium',notes:'PME spécialisée. Accroche food cost / BTS MHR forte.'}),
+
+  mkCompany({id:2215,name:'Eatbu',sector:'Hospitality Tech',website:'eatbu.com',founded:'2015',employees:'20+',funding:'€2M',stage:'Startup',description:"Logiciel de gestion des avis clients et e-réputation pour restaurateurs. Centralise Google, TripAdvisor, Booking.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2216,name:'Dishop',sector:'Hospitality Tech',website:'dishop.co',founded:'2019',employees:'30+',funding:'€3M',stage:'Startup',description:"Plateforme de commande en ligne en marque blanche pour restaurants. Alternative à Uber Eats / Deliveroo sans commission.",hook:'',marketType:'hidden',priority:'medium'}),
+
+  mkCompany({id:2217,name:'Hiboutik',sector:'Hospitality Tech',website:'hiboutik.com',founded:'2013',employees:'10+',funding:'Autofinancé',stage:'PME',description:"Logiciel de caisse cloud gratuit pour commerces et restaurants. 50 000+ utilisateurs. Modèle freemium.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2218,name:'Sevenrooms',sector:'Hospitality Tech',website:'sevenrooms.com',founded:'2011',employees:'600+',funding:'$125M',stage:'Scale-up',description:"CRM et gestion des réservations pour restaurants et hôtels premium. Clients : Mandarin Oriental, NoMad, D&D London.",hook:'Expérience Cheval Blanc Paris + clientèle UHNWI = compréhension de leur marché luxury F&B',marketType:'hidden',keyPeople:[{name:'Joel Montaniel',role:'CEO & Co-fondateur',linkedin:'linkedin.com/in/joelmontaniel',email:'',phone:''}],priority:'high',notes:'Américain, segment luxury hospitality. Accroche Cheval Blanc directe et très crédible.'}),
+
+  mkCompany({id:2219,name:'Trivec',sector:'Hospitality Tech',website:'trivec.com',founded:'1994',employees:'200+',funding:'Privé',stage:'PME',description:"Logiciel de caisse et gestion pour restaurants, cafés et hôtels en Scandinavie et Europe du Nord. Présence croissante en France.",hook:'',marketType:'hidden',priority:'low'}),
+
+  mkCompany({id:2220,name:'Foodtech Connect',sector:'Hospitality Tech',website:'restaurantji.com',founded:'2018',employees:'20+',funding:'Non levé',stage:'Startup',description:"Agrégateur de menus et informations restaurants pour consommateurs. B2C mais partenariats B2B avec groupes restauration.",hook:'',marketType:'hidden',priority:'low'}),
+];
+
+// ============================================================
+// DEFAULT TEMPLATES
+// ============================================================
+const DEFAULT_TEMPLATES=[
+  {title:'LinkedIn 1er contact',text:`Bonjour [Prénom],\n\nJe suis tombé sur votre profil en cherchant des parcours en [Secteur] à Paris.\n\n[Point commun spécifique] a particulièrement retenu mon attention.\n\nÉtant moi-même poitevin fraîchement arrivé à Paris pour intégrer l'écosystème [Secteur], je serais curieux de connaître votre ressenti : comment avez-vous abordé ce pivot ?\n\nAu plaisir d'échanger,\nNathan`},
+  {title:'Email follow-up J+7',text:`Objet : Suite à mon message LinkedIn — Nathan Evain (Alternance Sept. 2026)\n\nBonjour [Prénom],\n\nJe fais suite à mon message LinkedIn qui a sans doute été noyé sous vos notifications.\n\nJe vais droit au but : je recherche activement une alternance en Business Development / Ingénierie d'Affaires en Fintech pour septembre 2026.\n\nCV ci-joint (FR + EN). Je serais très motivé à l'idée d'échanger 10 minutes.\n\nBien à vous,\nNathan Evain — 07 61 45 71 08`},
+  {title:'Email direct alternance',text:`Objet : De Poitiers à la Fintech | Nathan Evain (Alternance Septembre 2026)\n\nBonjour [Prénom],\n\nJe vais droit au but : je recherche activement une alternance en Fintech Sales pour septembre 2026.\n\n• -20% délais de traitement au Groupe Le Figaro\n• Portefeuille virtuel €100K géré avec +12% de performance\n• Fondateur de Glass Fragments — cycle B2B/B2C complet\n\nCV ci-joint (FR + EN). Seriez-vous ouvert à 10 min d'échange ?\n\nNathan Evain — 07 61 45 71 08`},
+  {title:'Réponse après call',text:`Objet : Merci pour notre échange — Nathan Evain\n\nBonjour [Prénom],\n\nMerci pour ces [durée] minutes d'échange très enrichissantes.\n\nPour résumer ma valeur ajoutée :\n• [Point fort 1 en lien avec leur besoin]\n• [Point fort 2]\n\nJe reste à votre disposition pour la suite.\n\nNathan Evain`}
+];
+
+const CHECKLIST_ITEMS=[
+  {text:'Mettre à jour le CRM après chaque action',tag:'quotidien',tc:'var(--red)'},
+  {text:'3 nouveaux contacts LinkedIn / semaine',tag:'hebdo',tc:'var(--blue)'},
+  {text:'Relancer les contacts sans réponse à J+7',tag:'hebdo',tc:'var(--yellow)'},
+  {text:'Exporter le JSON de sauvegarde sur Google Drive',tag:'hebdo',tc:'var(--orange)'},
+  {text:'CV EN à jour et sans fautes',tag:'1x',tc:'var(--green)'},
+  {text:'Bannière LinkedIn mise à jour',tag:'1x',tc:'var(--green)'},
+  {text:'Profil LinkedIn complété à 100%',tag:'1x',tc:'var(--green)'},
+  {text:'Inscription Welcome to the Jungle + Otta',tag:'1x',tc:'var(--green)'},
+  {text:'Contacter 1 alumni / semaine',tag:'hebdo',tc:'var(--blue)'},
+  {text:'Préparer 3 questions stratégiques / entretien',tag:'avant',tc:'var(--purple)'},
+  {text:'Pratiquer son pitch de 2 minutes à voix haute',tag:'hebdo',tc:'var(--blue)'},
+  {text:'Identifier 3 nouvelles cibles sur WTTJ/LinkedIn',tag:'hebdo',tc:'var(--blue)'},
+  {text:'Vérifier les follow-up à venir cette semaine',tag:'lundi',tc:'var(--cyan)'},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let companies=[],contacts=[],editingCompanyId=null,editingContactId=null;
+let currentDetTab=0,currentDetCompanyId=null,currentSector='all',searchQuery='';
+const checkedItems=new Set();
+let tempKeyPeople=[],tempSecondaryContacts=[];
+let TEMPLATES=[],editingTmplIdx=-1,currentTmplIdx=0;
+
+// ============================================================
+// STORAGE
+// ============================================================
+const SK='crm_v4_nathan',SK_T='crm_v4_templates';
+function saveData(){try{localStorage.setItem(SK,JSON.stringify({companies,contacts,checkedItems:[...checkedItems]}));}catch(e){}}
+function loadData(){
+  try{
+    const raw=localStorage.getItem(SK)||localStorage.getItem('crm_v3_nathan');
+    if(raw){
+      const p=JSON.parse(raw);
+      companies=(p.companies||[]).map(c=>mkCompany(c));
+      contacts=p.contacts||[];
+      (p.checkedItems||[]).forEach(i=>checkedItems.add(i));
+      // Merge : ajouter les nouvelles entreprises du SEED qui ne sont pas encore dans les données sauvegardées
+      const savedIds=new Set(companies.map(c=>c.id));
+      const newEntries=SEED.filter(s=>!savedIds.has(s.id)).map(s=>mkCompany({...s}));
+      if(newEntries.length>0){companies.push(...newEntries);saveData();}
+    }else{
+      companies=SEED.map(c=>mkCompany({...c}));contacts=[];saveData();
+    }
+  }catch(e){companies=SEED.map(c=>mkCompany({...c}));contacts=[];}
+}
+function saveTemplates(){try{localStorage.setItem(SK_T,JSON.stringify(TEMPLATES));}catch(e){}}
+function loadTemplates(){
+  try{
+    const raw=localStorage.getItem(SK_T)||localStorage.getItem('crm_v3_templates');
+    TEMPLATES=raw?JSON.parse(raw):[...DEFAULT_TEMPLATES.map(t=>({...t}))];
+  }catch(e){TEMPLATES=[...DEFAULT_TEMPLATES.map(t=>({...t}))];}
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify({companies,contacts,checkedItems:[...checkedItems],templates:TEMPLATES,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='alternance-crm-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();URL.revokeObjectURL(a.href);toast('Backup exporté !');
+}
+function importData(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const p=JSON.parse(ev.target.result);
+      if(p.companies)companies=(p.companies||[]).map(c=>mkCompany(c));
+      if(p.contacts)contacts=p.contacts||[];
+      if(p.checkedItems){checkedItems.clear();(p.checkedItems||[]).forEach(i=>checkedItems.add(i));}
+      if(p.templates){TEMPLATES=p.templates;saveTemplates();}
+      saveData();renderDashboard();toast('Données importées !');
+    }catch(err){alert('Fichier JSON invalide.');}
+  };
+  reader.readAsText(file);e.target.value='';
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function toast(msg='Enregistré'){const t=document.getElementById('toast');t.textContent='✓ '+msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function closeOverlay(id){document.getElementById(id).classList.remove('open');}
+function openOverlay(id){document.getElementById(id).classList.add('open');}
+function fmtDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});}catch(e){return d;}}
+function daysAgo(d){if(!d)return 999;return Math.floor((Date.now()-new Date(d))/(1000*60*60*24));}
+function daysBefore(d){if(!d)return 999;return Math.floor((new Date(d)-Date.now())/(1000*60*60*24));}
+function sc(s){return SCOLOR[s]||'var(--blue)';}
+function sb(s){return SBADGE[s]||'badge-tech';}
+function pc(p){return ({high:'#ff3d3d',medium:'#ffc400',low:'#00e676'})[p]||'#ffc400';}
+function sl(id){return STAGES[id]?.label||'—';}
+function scol(id){return STAGES[id]?.color||'#4a6880';}
+function ini(name){return(name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function todayStr(){return new Date().toISOString().split('T')[0];}
+function globalSearch(q){
+  searchQuery=q.toLowerCase();
+  const panel=document.getElementById('search-panel');
+  if(!searchQuery){panel.style.display='none';return;}
+  // Cherche dans entreprises + contacts
+  const cResults=companies.filter(c=>!c.inbox&&(c.name+' '+c.description+' '+c.sector+' '+c.hook).toLowerCase().includes(searchQuery)).slice(0,8);
+  const ctResults=contacts.filter(c=>(c.name+' '+c.companyName+' '+c.role+' '+c.email).toLowerCase().includes(searchQuery)).slice(0,4);
+  if(!cResults.length&&!ctResults.length){
+    panel.innerHTML='<div style="padding:12px 14px;font-size:12px;color:var(--muted)">Aucun résultat pour "'+q+'"</div>';
+    panel.style.display='block';return;
+  }
+  let html='';
+  if(cResults.length){
+    html+='<div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:8px 14px 4px;font-weight:700">Entreprises</div>';
+    html+=cResults.map(c=>`<div class="search-result-item" onclick="closeSearch();openCompanyDetail(${c.id})">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div><div style="font-weight:700;font-size:13px">${c.name}</div><div style="font-size:10px;color:var(--muted)">${c.sector} · ${STAGES[c.status]?.label||'—'}</div></div>
+        <div style="font-size:10px;color:${pc(c.priority)}">● ${c.priority}</div>
+      </div>
+      ${c.hook?`<div style="font-size:10px;color:var(--orange);font-style:italic;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🎣 ${c.hook}</div>`:''}
+    </div>`).join('');
+  }
+  if(ctResults.length){
+    html+='<div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:8px 14px 4px;font-weight:700;border-top:1px solid var(--border);margin-top:4px">Contacts</div>';
+    html+=ctResults.map(c=>`<div class="search-result-item" onclick="closeSearch();switchView('contacts',document.querySelector('[onclick*=contacts]'))">
+      <div style="font-weight:700;font-size:13px">${c.name}</div>
+      <div style="font-size:10px;color:var(--muted)">${c.role||'—'} · ${c.companyName||'—'}</div>
+    </div>`).join('');
+  }
+  html+='<div style="padding:6px 14px 8px;border-top:1px solid var(--border);margin-top:4px"><button onclick="closeSearch();switchView(\'entreprises\',document.querySelector(\'[onclick*=entreprises]\'))" style="font-size:11px;color:var(--cyan);background:none;border:none;cursor:pointer;font-family:var(--font)">Voir tous les résultats dans Entreprises →</button></div>';
+  panel.innerHTML=html;
+  panel.style.display='block';
+  if(document.getElementById('view-entreprises').classList.contains('active'))renderEntreprises();
+}
+function closeSearch(){
+  document.getElementById('search-input').value='';
+  searchQuery='';
+  document.getElementById('search-panel').style.display='none';
+}
+
+// Fix URL LinkedIn — évite les erreurs de lien
+function safeUrl(url){
+  if(!url||url==='#')return'#';
+  url=url.trim();
+  if(url.startsWith('http://')||url.startsWith('https://'))return url;
+  return'https://'+url;
+}
+
+function checkDuplicate(val){
+  const w=document.getElementById('dup-warning');if(!w)return;
+  const m=companies.filter(c=>c.name.toLowerCase().trim()===val.toLowerCase().trim()&&c.id!==editingCompanyId);
+  if(m.length>0){w.style.display='block';w.textContent='⚠️ '+m[0].name+' existe déjà dans votre CRM.';}
+  else w.style.display='none';
+}
+function checkDuplicateQuick(val){
+  const w=document.getElementById('dup-warning-quick');if(!w)return;
+  const m=companies.filter(c=>c.name.toLowerCase().trim()===val.toLowerCase().trim());
+  if(m.length>0){w.style.display='block';w.textContent='⚠️ '+m[0].name+' existe déjà.';}
+  else w.style.display='none';
+}
+
+// ============================================================
+// VIEW SWITCHING
+// ============================================================
+function switchView(name,btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='dashboard')renderDashboard();
+  else if(name==='pipeline')renderPipeline();
+  else if(name==='entreprises')renderEntreprises();
+  else if(name==='contacts')renderContacts();
+  else if(name==='analytics')renderAnalytics();
+  else if(name==='strategie')renderStrategie();
+}
+
+function updateHeaderStats(){
+  const t=companies.filter(c=>!c.inbox).length;
+  const a=companies.filter(c=>!c.inbox&&c.status>=1&&c.status<=3).length;
+  const r=companies.filter(c=>!c.inbox&&c.status>=2).length;
+  const i=companies.filter(c=>!c.inbox&&(c.status===3||c.status===4)).length;
+  const fu=companies.filter(c=>!c.inbox&&c.status===1&&daysAgo(c.date)>=7).length;
+  document.getElementById('hs-total').textContent=t;
+  document.getElementById('hs-active').textContent=a;
+  document.getElementById('hs-reply').textContent=r;
+  document.getElementById('hs-interview').textContent=i;
+  document.getElementById('hs-followup').textContent=fu;
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard(){
+  updateHeaderStats();renderDeadline();
+  const main=companies.filter(c=>!c.inbox);
+  const total=main.length,contacted=main.filter(c=>c.status>=1&&c.status!==6).length;
+  const replies=main.filter(c=>c.status>=2&&c.status!==6).length;
+  const interviews=main.filter(c=>c.status===3||c.status===4).length;
+  const fu=main.filter(c=>c.status===1&&daysAgo(c.date)>=7).length;
+  document.getElementById('dc-total').textContent=total;
+  document.getElementById('dc-sub1').textContent=main.filter(c=>c.priority==='high').length+' haute priorité';
+  document.getElementById('dc-contacted').textContent=contacted;
+  document.getElementById('dc-sub2').textContent=Math.round(contacted/Math.max(total,1)*100)+'% du pipeline';
+  document.getElementById('dc-replies').textContent=replies;
+  document.getElementById('dc-sub3').textContent='Taux: '+Math.round(replies/Math.max(contacted,1)*100)+'%';
+  document.getElementById('dc-interviews').textContent=interviews;
+  document.getElementById('dc-followups').textContent=fu;
+
+  const fd=[
+    {l:'Total ciblées',v:total,c:'var(--muted)'},
+    {l:'Contactées',v:contacted,c:'var(--cyan)'},
+    {l:'Réponses',v:replies,c:'var(--purple)'},
+    {l:'Entretiens',v:interviews,c:'var(--blue)'},
+    {l:'Offres',v:main.filter(c=>c.status===4).length,c:'var(--green)'}
+  ];
+  const mx=Math.max(total,1);
+  document.getElementById('dash-funnel').innerHTML=fd.map(f=>`<div class="funnel-row"><div class="funnel-label">${f.l}</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${Math.max(4,f.v/mx*100)}%;background:${f.c}">${f.v>0?'<span>'+f.v+'</span>':''}</div></div><div class="funnel-count">${f.v}</div></div>`).join('');
+  document.getElementById('pb-c').style.width=Math.min(100,contacted/20*100)+'%';document.getElementById('pb-c-val').textContent=contacted+'/20';
+  document.getElementById('pb-r').style.width=Math.min(100,replies/6*100)+'%';document.getElementById('pb-r-val').textContent=replies+'/6';
+  document.getElementById('pb-i').style.width=Math.min(100,interviews/2*100)+'%';document.getElementById('pb-i-val').textContent=interviews+'/2';
+
+  const top3=main.filter(c=>c.status===0||c.status===6).map(c=>({...c,score:smartScore(c)})).sort((a,b)=>b.score-a.score).slice(0,3);
+  document.getElementById('top3-list').innerHTML=top3.length?top3.map((c,i)=>`<div class="top3-item" onclick="openCompanyDetail(${c.id})"><div style="display:flex;align-items:center;gap:6px;flex:1"><div class="top3-rank">${i+1}</div><div><div class="top3-name">${c.name}</div><div class="top3-reason">${c.hook||c.sector}</div></div></div><div class="top3-score">${c.score}pts</div></div>`).join(''):'<div style="font-size:12px;color:var(--muted);padding:8px">Toutes les entreprises ont été contactées ✅</div>';
+
+  const fuList=main.filter(c=>c.status===1&&daysAgo(c.date)>=7).slice(0,4);
+  document.getElementById('followup-alerts').innerHTML=fuList.length?fuList.map(c=>`<div class="alert-item"><div style="display:flex;align-items:center;gap:7px"><div class="ai-dot" style="background:var(--red)"></div><div><div style="font-weight:600;font-size:12px;cursor:pointer" onclick="openCompanyDetail(${c.id})">${c.name}</div><div style="font-size:10px;color:var(--muted)">Sans réponse depuis ${daysAgo(c.date)} jours</div></div></div><div style="font-size:11px;font-family:var(--mono);color:var(--red)">J+${daysAgo(c.date)}</div></div>`).join(''):'<div style="font-size:12px;color:var(--muted);padding:8px">✅ Aucun follow-up urgent</div>';
+
+  renderAgenda();
+
+  const allLogs=companies.flatMap(c=>(c.activityLog||[]).map(l=>({...l,company:c.name,companyId:c.id}))).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const TI={linkedin:'🔗',email:'📧',call:'📞',entretien:'🤝',note:'📝','':'📌'};
+  // 8 entrées visibles, scroll pour le reste
+  const recentHtml=allLogs.slice(0,30).map(l=>`<div class="act-item"><div style="width:16px;text-align:center;flex-shrink:0">${TI[l.type]||'📌'}</div><div style="flex:1;font-size:12px"><span style="font-weight:600;cursor:pointer" onclick="openCompanyDetail(${l.companyId})">${l.company}</span> — ${l.action}</div><div class="act-date">${fmtDate(l.date)}</div></div>`).join('');
+  document.getElementById('recent-activity').innerHTML=recentHtml||'<div style="font-size:12px;color:var(--muted);padding:8px">Aucune activité</div>';
+  const sectors={};companies.filter(c=>!c.inbox).forEach(c=>{sectors[c.sector]=(sectors[c.sector]||0)+1;});
+  document.getElementById('sector-breakdown').innerHTML=Object.entries(sectors).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="color:${sc(s)}">${s}</span><span style="font-family:var(--mono)">${n}</span></div>`).join('');
+}
+
+// AGENDA
+function renderAgenda(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const weekDays=[];for(let i=0;i<5;i++){const d=new Date(today);d.setDate(today.getDate()-today.getDay()+1+i);weekDays.push(d);}
+  const dayNames=['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
+  document.getElementById('agenda-week').innerHTML=weekDays.map((d,i)=>{
+    const ds=d.toISOString().split('T')[0],isToday=d.getTime()===today.getTime();
+    const tasks=[];
+    companies.filter(c=>!c.inbox).forEach(c=>{
+      if(c.followUpDate===ds)tasks.push({text:'⏰ Follow-up: '+c.name,color:'var(--yellow)',id:c.id});
+      if(c.nextActionDate===ds&&c.nextAction)tasks.push({text:'⚡ '+c.nextAction+' ('+c.name+')',color:'var(--cyan)',id:c.id});
+      if(c.interviewPrep?.interviewDate===ds)tasks.push({text:'🤝 Entretien: '+c.name,color:'var(--green)',id:c.id});
+    });
+    return`<div class="agenda-day ${isToday?'today':''}"><div class="agenda-day-title">${dayNames[i]} ${d.getDate()}/${d.getMonth()+1}</div>${tasks.length?tasks.map(t=>`<div class="agenda-task" style="background:${t.color}18;color:${t.color};border-left:2px solid ${t.color}" onclick="openCompanyDetail(${t.id})">${t.text}</div>`).join(''):'<div class="agenda-empty">—</div>'}</div>`;
+  }).join('');
+}
+
+// ============================================================
+// PIPELINE WHEEL — scroll horizontal à la molette
+// ============================================================
+function pipelineWheel(e){
+  const wrap=document.getElementById('pipeline-board-wrap');
+  if(!wrap)return;
+  // Si l'utilisateur scrolle verticalement dans une colonne, ne pas intercepter
+  const target=e.target.closest('.pl-body');
+  if(target)return;
+  e.preventDefault();
+  wrap.scrollLeft+=e.deltaY||e.deltaX;
+}
+
+// ============================================================
+// HISTORY MODAL
+// ============================================================
+let historyFilter='all';
+function openHistoryModal(){
+  historyFilter='all';
+  document.querySelectorAll('.hfilt-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  renderHistoryLog();
+  openOverlay('history-modal');
+}
+function filterHistory(type,btn){
+  historyFilter=type;
+  document.querySelectorAll('.hfilt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistoryLog();
+}
+function renderHistoryLog(){
+  const TI={linkedin:'🔗',email:'📧',call:'📞',entretien:'🤝',note:'📝','':'📌'};
+  const TC={linkedin:'var(--blue)',email:'var(--cyan)',call:'var(--green)',entretien:'var(--purple)',note:'var(--muted)','':'var(--muted)'};
+  let logs=companies.flatMap(c=>(c.activityLog||[]).map(l=>({...l,company:c.name,companyId:c.id}))).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(historyFilter!=='all')logs=logs.filter(l=>l.type===historyFilter);
+  const el=document.getElementById('history-log-body');
+  if(!el)return;
+  el.innerHTML=logs.length?logs.map(l=>`
+    <div class="alog-item">
+      <div class="alog-date">${fmtDate(l.date)}</div>
+      <div style="width:20px;text-align:center;flex-shrink:0">${TI[l.type]||'📌'}</div>
+      <div class="alog-action"><span style="font-weight:600;cursor:pointer;color:var(--cyan)" onclick="closeOverlay('history-modal');openCompanyDetail(${l.companyId})">${l.company}</span> — ${l.action}</div>
+      ${l.type?`<div class="alog-type" style="background:${TC[l.type]||'var(--muted)'}22;color:${TC[l.type]||'var(--muted)'}">${l.type}</div>`:''}
+    </div>`).join(''):'<div style="font-size:12px;color:var(--muted);padding:16px;text-align:center">Aucune activité pour ce filtre</div>';
+}
+
+// ============================================================
+// PIPELINE
+// ============================================================
+let draggedId=null;
+
+function renderPipeline(){
+  updateHeaderStats();
+  // SANDBOX
+  const sandbox=companies.filter(c=>c.inbox);
+  const sbSec=document.getElementById('sandbox-section');
+  const sbGrid=document.getElementById('sandbox-grid');
+  const sbCount=document.getElementById('sandbox-count');
+  if(sandbox.length>0){
+    sbSec.style.display='block';
+    sbCount.textContent=sandbox.length;
+    sbGrid.innerHTML=sandbox.map(c=>`
+      <div class="sandbox-card">
+        <div class="sandbox-name">${c.name}</div>
+        <div class="sandbox-sector">${c.sector}</div>
+        ${c.hook?`<div class="sandbox-hook">🎣 ${c.hook}</div>`:''}
+        <div class="sandbox-actions">
+          <button class="sandbox-btn sandbox-btn-complete" onclick="promoteFromSandbox(${c.id})">✏️ Compléter → Pipeline</button>
+          <button class="sandbox-btn sandbox-btn-del" onclick="deleteCompany(${c.id})">✕</button>
+        </div>
+      </div>`).join('');
+  }else{sbSec.style.display='none';}
+
+  // PIPELINE BOARD
+  const board=document.getElementById('pipeline-board');board.innerHTML='';
+  STAGES.forEach(stage=>{
+    const cards=companies.filter(c=>!c.inbox&&c.status===stage.id).sort((a,b)=>['high','medium','low'].indexOf(a.priority)-['high','medium','low'].indexOf(b.priority));
+    const col=document.createElement('div');
+    col.className='pl-col'+(stage.id===0?' pl-col-0':'');
+    col.dataset.stageId=stage.id;
+    // Drop zone events
+    col.addEventListener('dragover',e=>{e.preventDefault();col.classList.add('drag-over');});
+    col.addEventListener('dragleave',()=>col.classList.remove('drag-over'));
+    col.addEventListener('drop',e=>{
+      e.preventDefault();col.classList.remove('drag-over');
+      if(draggedId!==null){
+        const c=companies.find(x=>x.id===draggedId);
+        if(c){
+          c.status=stage.id;
+          if(stage.id>=1&&!c.date)c.date=todayStr();
+          if(!c.activityLog)c.activityLog=[];
+          c.activityLog.push({date:todayStr(),action:'Déplacé vers "'+stage.label+'" (drag & drop)',type:'note'});
+          saveData();renderPipeline();updateHeaderStats();toast('Déplacé vers '+stage.label);
+        }
+        draggedId=null;
+      }
+    });
+
+    col.innerHTML=`<div class="pl-col-head"><div class="pl-col-title" style="color:${stage.color}">${stage.label}</div><div class="pl-count">${cards.length}</div></div>
+    <div class="pl-body">${cards.length===0?'<div class="pl-empty">Glisser ici</div>':''}${cards.map(c=>{
+      const relance=c.status===1&&daysAgo(c.date)>=7;
+      return`<div class="pl-card" style="--cc:${stage.color}" draggable="true"
+        ondragstart="draggedId=${c.id};this.classList.add('dragging')"
+        ondragend="this.classList.remove('dragging')"
+        onclick="openCompanyDetail(${c.id})">
+        <div style="position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:${pc(c.priority)}"></div>
+        <div class="pl-cn">${c.name}</div>
+        <div class="pl-sec">${c.sector}</div>
+        ${relance?`<div class="pl-relance">🔴 Relancer — ${daysAgo(c.date)}j sans réponse</div>`:''}
+        ${c.nextAction?`<div class="pl-next">⚡ ${c.nextAction}</div>`:''}
+        <div class="pl-meta"><div style="font-size:10px;color:var(--muted)">${c.myContact?.name?'👤 '+c.myContact.name:''}</div><div class="pl-date">${fmtDate(c.date)}</div></div>
+        <div class="pl-actions">
+          ${c.status>0?`<button class="pl-btn back" onclick="event.stopPropagation();regressStatus(${c.id})">←</button>`:''}
+          ${c.status<4?`<button class="pl-btn" onclick="event.stopPropagation();advanceStatus(${c.id})">→</button>`:''}
+          <button class="pl-btn del" onclick="event.stopPropagation();deleteCompany(${c.id})">✕</button>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+    board.appendChild(col);
+  });
+}
+
+function promoteFromSandbox(id){
+  const c=companies.find(x=>x.id===id);
+  if(c){c.inbox=false;saveData();}
+  editCompany(id);
+}
+
+// ============================================================
+// ENTREPRISES
+// ============================================================
+function renderEntreprises(){
+  updateHeaderStats();
+  const main=companies.filter(c=>!c.inbox);
+  const sectors=['all',...new Set(main.map(c=>c.sector))];
+  document.getElementById('sector-tabs').innerHTML=sectors.map(s=>`<button class="stab ${currentSector===s?'active':''}" onclick="setSector('${s}',this)">${s==='all'?'Toutes ('+main.length+')':s+' ('+main.filter(c=>c.sector===s).length+')'}</button>`).join('');
+  let filtered=main.filter(c=>currentSector==='all'||c.sector===currentSector);
+  if(searchQuery)filtered=filtered.filter(c=>(c.name+c.description+c.sector+c.hook).toLowerCase().includes(searchQuery));
+  const mf=document.getElementById('market-filter').value;
+  if(mf!=='all')filtered=filtered.filter(c=>c.marketType===mf);
+  const sort=document.getElementById('sort-select').value;
+  if(sort==='score')filtered.sort((a,b)=>smartScore(b)-smartScore(a));
+  else if(sort==='priority')filtered.sort((a,b)=>['high','medium','low'].indexOf(a.priority)-['high','medium','low'].indexOf(b.priority));
+  else if(sort==='name')filtered.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='status')filtered.sort((a,b)=>a.status-b.status);
+  else if(sort==='date')filtered.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+  document.getElementById('ent-grid').innerHTML=filtered.length?filtered.map(c=>{
+    const stage=STAGES[c.status],score=smartScore(c);
+    return`<div class="ent-card" style="--ec:${sc(c.sector)}" onclick="openCompanyDetail(${c.id})">
+      <div class="ec-top"><div class="ec-name">${c.name}</div><span class="ec-badge ${sb(c.sector)}">${c.sector}</span></div>
+      <div class="ec-score">Score: ${score}/100 ${c.marketType==='alumni'?'• 🤝 Alumni':c.marketType==='hidden'?'• 🕵️ Marché caché':'• 📋 Offre publiée'}</div>
+      ${c.hook?`<div class="ec-hook">🎣 ${c.hook}</div>`:''}
+      <div class="ec-desc">${c.description||'—'}</div>
+      <div class="ec-stats">${c.founded?'<div class="ec-stat">📅 <strong>'+c.founded+'</strong></div>':''}${c.employees?'<div class="ec-stat">👥 <strong>'+c.employees+'</strong></div>':''}${c.funding?'<div class="ec-stat">💰 <strong>'+c.funding+'</strong></div>':''}</div>
+      ${c.nextAction?`<div class="ec-next">⚡ ${c.nextAction}</div>`:''}
+      <div class="ec-foot"><div class="ec-status" style="color:${stage?.color};border-color:${stage?.color}">${stage?.label||'—'}</div><div style="font-size:10px;color:${pc(c.priority)}">● ${c.priority}</div></div>
+    </div>`;
+  }).join(''):'<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🔍</div><div>Aucune entreprise</div></div>';
+}
+function setSector(s,btn){currentSector=s;document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderEntreprises();}
+
+// ============================================================
+// CONTACTS
+// ============================================================
+function renderContacts(){
+  const q=document.getElementById('ct-search').value.toLowerCase();
+  const f=document.getElementById('ct-filter').value;
+  const list=contacts.filter(c=>{const m=!q||(c.name+c.companyName+c.role+c.email).toLowerCase().includes(q);const sf=f==='all'||c.status===f;return m&&sf;});
+  const SC={'à contacter':'var(--muted)','contacté':'var(--cyan)','répondu':'var(--purple)','meeting':'var(--green)','alumni':'var(--orange)'};
+  document.getElementById('ct-tbody').innerHTML=list.length?list.map(c=>`<tr>
+    <td style="font-weight:600">${c.name}</td><td style="color:var(--muted)">${c.companyName||'—'}</td>
+    <td>${c.role||'—'}</td>
+    <td style="font-family:var(--mono);font-size:11px;color:var(--cyan)">${c.email||'—'}</td>
+    <td style="font-family:var(--mono);font-size:11px">${c.phone||'—'}</td>
+    <td><span class="sbadge" style="color:${SC[c.status]||'var(--muted)'};border-color:${SC[c.status]||'var(--muted)'}">${c.status}</span></td>
+    <td style="font-family:var(--mono);font-size:11px;color:${c.followUpDate&&daysBefore(c.followUpDate)<=3?'var(--yellow)':'var(--muted)'}">${fmtDate(c.followUpDate)}</td>
+    <td><button class="tbl-btn" onclick="editContact(${c.id})">✏️</button><button class="tbl-btn del" onclick="deleteContact(${c.id})">✕</button></td>
+  </tr>`).join(''):`<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Aucun contact</td></tr>`;
+}
+
+// ============================================================
+// ANALYTICS
+// ============================================================
+function renderAnalytics(){
+  const main=companies.filter(c=>!c.inbox);
+  const channels={linkedin:0,email:0,referral:0,wttj:0};
+  const channelReply={linkedin:0,email:0,referral:0,wttj:0};
+  main.forEach(c=>{if(c.channel&&c.status>=1){channels[c.channel]=(channels[c.channel]||0)+1;if(c.status>=2)channelReply[c.channel]=(channelReply[c.channel]||0)+1;}});
+  const chLabels={linkedin:'LinkedIn',email:'Email direct',referral:'Via réseau',wttj:'WTTJ/Candidature'};
+  document.getElementById('ana-by-channel').innerHTML=Object.entries(channels).map(([k,v])=>{
+    const rate=v>0?Math.round(channelReply[k]/v*100):0;
+    return`<div class="kpi-row"><span class="kpi-label">${chLabels[k]||k}</span><span class="kpi-val" style="color:${rate>30?'var(--green)':rate>10?'var(--yellow)':'var(--muted)'}">${v} envois → ${rate}%</span></div>`;
+  }).join('')||'<div style="color:var(--muted);font-size:12px;padding:8px">Pas encore de données</div>';
+
+  const secR={},secT={};
+  main.forEach(c=>{secT[c.sector]=(secT[c.sector]||0)+1;if(c.status>=2)secR[c.sector]=(secR[c.sector]||0)+1;});
+  document.getElementById('ana-by-sector').innerHTML=Object.entries(secT).sort((a,b)=>b[1]-a[1]).map(([s,t])=>{
+    const r=secR[s]||0,rate=t>0?Math.round(r/t*100):0;
+    return`<div class="kpi-row"><span class="kpi-label" style="color:${sc(s)}">${s}</span><span class="kpi-val">${r}/${t} (${rate}%)</span></div>`;
+  }).join('');
+
+  const dayCount={1:0,2:0,3:0,4:0,5:0};
+  main.forEach(c=>{(c.activityLog||[]).forEach(l=>{const d=new Date(l.date).getDay();if(d>=1&&d<=5)dayCount[d]=(dayCount[d]||0)+1;});});
+  const dNames={1:'Lun',2:'Mar',3:'Mer',4:'Jeu',5:'Ven'};
+  document.getElementById('ana-by-day').innerHTML=Object.entries(dayCount).map(([d,v])=>{
+    const good=d==2||d==4;
+    return`<div class="kpi-row"><span class="kpi-label" style="color:${good?'var(--green)':'var(--text)'}">${dNames[d]} ${good?'⭐':''}</span><span class="kpi-val">${v} actions</span></div>`;
+  }).join('');
+
+  const total=main.length,cont=main.filter(c=>c.status>=1).length;
+  const rep=main.filter(c=>c.status>=2).length,inter=main.filter(c=>c.status===3||c.status===4).length;
+  document.getElementById('ana-kpis').innerHTML=`
+    <div class="kpi-row"><span class="kpi-label">Taux de contact</span><span class="kpi-val" style="color:var(--cyan)">${Math.round(cont/Math.max(total,1)*100)}%</span></div>
+    <div class="kpi-row"><span class="kpi-label">Taux de réponse</span><span class="kpi-val" style="color:${rep/Math.max(cont,1)>0.2?'var(--green)':'var(--yellow)'}">${Math.round(rep/Math.max(cont,1)*100)}%</span></div>
+    <div class="kpi-row"><span class="kpi-label">Taux de conversion entretien</span><span class="kpi-val" style="color:var(--purple)">${Math.round(inter/Math.max(rep,1)*100)}%</span></div>
+    <div class="kpi-row"><span class="kpi-label">Bac à sable (à compléter)</span><span class="kpi-val" style="color:var(--orange)">${companies.filter(c=>c.inbox).length}</span></div>
+    <div class="kpi-row"><span class="kpi-label">Marché caché vs publiée</span><span class="kpi-val">${main.filter(c=>c.marketType==='hidden').length} / ${main.filter(c=>c.marketType==='published').length}</span></div>
+    <div class="kpi-row"><span class="kpi-label">Via alumni / réseau</span><span class="kpi-val" style="color:var(--orange)">${main.filter(c=>c.marketType==='alumni').length}</span></div>`;
+
+  document.getElementById('ana-status-breakdown').innerHTML=STAGES.map(s=>{
+    const n=main.filter(c=>c.status===s.id).length;
+    return`<div class="kpi-row"><span class="kpi-label" style="color:${s.color}">${s.label}</span><span class="kpi-val" style="color:${s.color}">${n}</span></div>`;
+  }).join('');
+}
+
+// ============================================================
+// STRATEGIE
+// ============================================================
+function renderStrategie(){
+  document.getElementById('weekly-checklist').innerHTML=CHECKLIST_ITEMS.map((item,i)=>`<div class="cl-item" onclick="toggleCheck(${i})"><div class="cl-box ${checkedItems.has(i)?'done':''}"></div><span class="cl-txt ${checkedItems.has(i)?'done':''}">${item.text}</span><span class="cl-tag" style="background:${item.tc}22;color:${item.tc};border:1px solid ${item.tc}44">${item.tag}</span></div>`).join('');
+  renderTemplateTabs();renderTemplateContent();
+}
+function toggleCheck(i){if(checkedItems.has(i))checkedItems.delete(i);else checkedItems.add(i);saveData();renderStrategie();}
+function renderTemplateTabs(){document.getElementById('tmpl-tabs').innerHTML=TEMPLATES.map((t,i)=>`<button class="ttab ${i===currentTmplIdx?'active':''}" onclick="selectTemplate(${i},this)">${t.title}</button>`).join('');}
+function selectTemplate(i,btn){currentTmplIdx=i;editingTmplIdx=-1;document.querySelectorAll('.ttab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTemplateContent();}
+function renderTemplateContent(){
+  const t=TEMPLATES[currentTmplIdx];if(!t)return;
+  const isEditing=editingTmplIdx===currentTmplIdx;
+  const rendered=t.text.replace(/\n/g,'<br>').replace(/\[([^\]]+)\]/g,'<em style="color:var(--cyan);font-weight:600;font-style:normal">[$1]</em>');
+  document.getElementById('tmpl-display').innerHTML=isEditing
+    ?`<textarea class="tmpl-edit-area" id="tmpl-textarea">${t.text}</textarea><div class="tmpl-actions"><button class="tmpl-btn tmpl-btn-save" onclick="saveTemplate()">💾 Sauvegarder</button><button class="tmpl-btn tmpl-btn-cancel" onclick="cancelEditTemplate()">Annuler</button><button class="tmpl-btn tmpl-btn-cancel" onclick="resetTemplate()" style="margin-left:auto;color:var(--red);border-color:var(--red)">↺ Reset</button></div>`
+    :`<div class="tmpl-content">${rendered}</div><div class="tmpl-actions"><button class="tmpl-btn tmpl-btn-copy" onclick="copyTemplate()">📋 Copier</button><button class="tmpl-btn tmpl-btn-edit" onclick="startEditTemplate()">✏️ Modifier</button></div>`;
+}
+function startEditTemplate(){editingTmplIdx=currentTmplIdx;renderTemplateContent();}
+function cancelEditTemplate(){editingTmplIdx=-1;renderTemplateContent();}
+function saveTemplate(){const ta=document.getElementById('tmpl-textarea');if(!ta)return;TEMPLATES[currentTmplIdx].text=ta.value;saveTemplates();editingTmplIdx=-1;renderTemplateContent();toast('Template sauvegardé !');}
+function resetTemplate(){if(!confirm('Réinitialiser ?'))return;TEMPLATES[currentTmplIdx].text=DEFAULT_TEMPLATES[currentTmplIdx]?.text||TEMPLATES[currentTmplIdx].text;saveTemplates();editingTmplIdx=-1;renderTemplateContent();}
+function copyTemplate(){navigator.clipboard.writeText(TEMPLATES[currentTmplIdx].text).then(()=>toast('Copié !'));}
+
+// ============================================================
+// COMPANY DETAIL — 5 tabs + LinkedIn fix + contacts secondaires
+// ============================================================
+function openCompanyDetail(id){
+  const c=companies.find(x=>x.id===id);if(!c)return;
+  currentDetCompanyId=id;currentDetTab=0;
+  document.getElementById('det-company-name').textContent=c.name;
+  document.getElementById('det-company-badges').innerHTML=`<span class="badge ${sb(c.sector)}">${c.sector}</span><span class="sbadge" style="font-size:10px;color:${scol(c.status)};border-color:${scol(c.status)}">${sl(c.status)}</span><span style="font-size:10px;color:${pc(c.priority)}">● ${c.priority}</span>${c.stage?`<span style="font-size:10px;color:var(--muted);padding:2px 6px;background:var(--bg3);border-radius:4px">${c.stage}</span>`:''}${c.marketType==='alumni'?'<span style="font-size:10px;color:var(--orange);background:rgba(255,109,0,.1);padding:2px 6px;border-radius:4px">🤝 Alumni</span>':c.marketType==='hidden'?'<span style="font-size:10px;color:var(--muted);background:var(--bg3);padding:2px 6px;border-radius:4px">🕵️ Marché caché</span>':''}`;
+  document.querySelectorAll('.mtab').forEach((b,i)=>b.classList.toggle('active',i===0));
+  renderDetBody(c);openOverlay('company-detail-modal');
+}
+function switchDetTab(i,btn){currentDetTab=i;document.querySelectorAll('.mtab').forEach((b,j)=>b.classList.toggle('active',j===i));const c=companies.find(x=>x.id===currentDetCompanyId);if(c)renderDetBody(c);}
+
+function renderDetBody(c){
+  const body=document.getElementById('det-body');
+  if(currentDetTab===0){
+    body.innerHTML=`<div class="det-section"><div class="det-section-title">Informations générales</div>
+    <div class="det-grid-3" style="margin-bottom:8px">
+      <div class="det-field"><div class="df-label">Fondée</div><div class="df-val mono">${c.founded||'—'}</div></div>
+      <div class="det-field"><div class="df-label">Employés</div><div class="df-val mono">${c.employees||'—'}</div></div>
+      <div class="det-field"><div class="df-label">Levée de fonds</div><div class="df-val mono" style="color:var(--green)">${c.funding||'—'}</div></div>
+    </div>
+    <div class="det-grid">
+      <div class="det-field"><div class="df-label">Stade</div><div class="df-val">${c.stage||'—'}</div></div>
+      <div class="det-field"><div class="df-label">Site web</div><div class="df-val"><a href="${safeUrl(c.website)}" target="_blank" rel="noopener">${c.website||'—'}</a></div></div>
+    </div>
+    ${c.description?`<div class="det-field" style="margin-top:8px"><div class="df-label">Description</div><div style="font-size:12px;line-height:1.6;padding:8px;background:var(--bg2);border-radius:7px;margin-top:3px">${c.description}</div></div>`:''}
+    ${c.hook?`<div class="det-field" style="margin-top:8px;border-left:3px solid var(--orange)"><div class="df-label">🎣 Mon hook</div><div style="font-size:12px;color:var(--orange);font-style:italic;margin-top:2px">${c.hook}</div></div>`:''}
+    </div>
+    ${c.nextAction?`<div class="det-section"><div class="det-section-title">⚡ Prochaine action</div><div style="background:rgba(255,196,0,.08);border:1px solid var(--yellow);border-radius:8px;padding:10px 12px"><div style="font-weight:600;font-size:13px;color:var(--yellow)">${c.nextAction}</div>${c.nextActionDate?`<div style="font-size:11px;color:var(--muted);margin-top:3px">📅 ${fmtDate(c.nextActionDate)}</div>`:''}</div></div>`:''}`;
+  }else if(currentDetTab===1){
+    // KEY PEOPLE + MON CONTACT (cliquable) + CONTACTS SECONDAIRES
+    const kp=(c.keyPeople||[]);
+    const sc2=(c.secondaryContacts||[]);
+    body.innerHTML=`
+    <div class="det-section"><div class="det-section-title">👥 Key People</div>
+    <div class="people-list">${kp.length?kp.map(p=>{
+      const li=p.linkedin?`<a href="${safeUrl(p.linkedin)}" target="_blank" rel="noopener">LinkedIn →</a>`:'';
+      const em=p.email?`<a href="mailto:${p.email}">${p.email}</a>`:'';
+      const ph=p.phone?`<span>${p.phone}</span>`:'';
+      return`<div class="person-card"><div class="person-avatar">${ini(p.name)}</div><div><div class="person-name">${p.name}</div><div class="person-role">${p.role||'—'}</div><div class="person-contact">${li}${em}${ph}</div></div></div>`;
+    }).join(''):'<div style="font-size:12px;color:var(--muted)">Aucune personne renseignée</div>'}</div></div>
+    <div class="det-section"><div class="det-section-title">📬 Mon contact direct</div>
+    ${c.myContact?.name?`<div class="person-card"><div class="person-avatar">${ini(c.myContact.name)}</div><div>
+      <div class="person-name">${c.myContact.name}</div>
+      <div class="person-role">${c.myContact.role||''}</div>
+      <div class="person-contact">
+        ${c.myContact.linkedin?`<a href="${safeUrl(c.myContact.linkedin)}" target="_blank" rel="noopener">LinkedIn →</a>`:''}
+        ${c.myContact.email?`<a href="mailto:${c.myContact.email}">${c.myContact.email}</a>`:''}
+        ${c.myContact.phone?`<span>${c.myContact.phone}</span>`:''}
+      </div>
+    </div></div>`:'<div style="font-size:12px;color:var(--muted);padding:6px">Aucun contact renseigné</div>'}
+    </div>
+    <div class="det-section"><div class="det-section-title">👤 Contacts secondaires</div>
+    <div class="people-list">${sc2.length?sc2.map(p=>{
+      const li=p.linkedin?`<a href="${safeUrl(p.linkedin)}" target="_blank" rel="noopener">LinkedIn →</a>`:'';
+      const em=p.email?`<a href="mailto:${p.email}">${p.email}</a>`:'';
+      const ph=p.phone?`<span>${p.phone}</span>`:'';
+      return`<div class="person-card"><div class="person-avatar">${ini(p.name)}</div><div><div class="person-name">${p.name}</div><div class="person-role">${p.role||'—'}</div><div class="person-contact">${li}${em}${ph}</div></div></div>`;
+    }).join(''):'<div style="font-size:12px;color:var(--muted)">Aucun contact secondaire</div>'}</div></div>`;
+  }else if(currentDetTab===2){
+    const relance=c.status===1&&daysAgo(c.date)>=7;
+    body.innerHTML=`<div class="det-section"><div class="det-section-title">Statut dans le pipeline</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">Statut : <span class="sbadge" style="color:${scol(c.status)};border-color:${scol(c.status)}">${sl(c.status)}</span>${relance?`<span class="pl-relance">🔴 Sans réponse depuis ${daysAgo(c.date)} jours — relance recommandée</span>`:''}</div>
+    <div class="status-row">${STAGES.map(s=>`<button class="st-btn" onclick="changeCompanyStatus(${c.id},${s.id})" style="${c.status===s.id?'border-color:'+s.color+';color:'+s.color:''}">${s.label}</button>`).join('')}</div>
+    </div>
+    <div class="det-section"><div class="det-section-title">Dates & Actions</div>
+    <div class="det-grid">
+      <div class="det-field"><div class="df-label">Date de contact</div><div class="df-val mono">${fmtDate(c.date)}</div></div>
+      <div class="det-field"><div class="df-label">Follow-up prévu</div><div class="df-val mono" style="color:${c.followUpDate&&daysBefore(c.followUpDate)<=3?'var(--yellow)':'var(--text)'}">${fmtDate(c.followUpDate)}</div></div>
+    </div>
+    <div class="det-grid" style="margin-top:8px">
+      <div class="det-field"><div class="df-label">⚡ Prochaine action</div><div class="df-val" style="color:var(--yellow)">${c.nextAction||'—'}</div></div>
+      <div class="det-field"><div class="df-label">Date</div><div class="df-val mono">${fmtDate(c.nextActionDate)}</div></div>
+    </div></div>
+    <div class="det-section"><div class="det-section-title">Score IA</div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border-radius:8px">
+      <div style="font-size:28px;font-weight:800;font-family:var(--mono);color:var(--cyan)">${smartScore(c)}</div>
+      <div style="font-size:12px;color:var(--muted)">/100</div>
+    </div></div>`;
+  }else if(currentDetTab===3){
+    const ip=c.interviewPrep||{pitch:'',questions:['','',''],keyFacts:'',interviewDate:''};
+    body.innerHTML=`<div class="det-section"><div class="det-section-title">🗓 Préparation entretien</div>
+    ${c.status===3||c.status===4?`<div style="background:rgba(0,230,118,.08);border:1px solid var(--green);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:var(--green)">✅ Entretien ${ip.interviewDate?'prévu le '+fmtDate(ip.interviewDate):''}</div>`:'<div style="font-size:12px;color:var(--muted);margin-bottom:12px">Remplis ce module dès qu\'un entretien est planifié.</div>'}
+    <div class="field"><label>📅 Date de l'entretien</label><input type="date" id="ip-date" value="${ip.interviewDate||''}" style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;width:100%;color-scheme:dark"></div>
+    <div class="field"><label>🎤 Mon pitch de 2 minutes</label><textarea id="ip-pitch" style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:8px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;resize:vertical;min-height:80px;line-height:1.5">${ip.pitch||''}</textarea></div>
+    <div class="field"><label>❓ Mes 3 questions stratégiques</label>
+      ${[0,1,2].map(i=>`<input type="text" id="ip-q${i}" value="${(ip.questions||['','',''])[i]||''}" placeholder="Question ${i+1}..." style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;margin-bottom:5px">`).join('')}
+    </div>
+    <div class="field"><label>📊 Chiffres clés à connaître</label><textarea id="ip-facts" style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:8px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;resize:vertical;min-height:60px;line-height:1.5">${ip.keyFacts||''}</textarea></div>
+    <button onclick="saveInterviewPrep(${c.id})" class="btn-save" style="margin-top:4px">💾 Sauvegarder</button>
+    </div>`;
+  }else if(currentDetTab===4){
+    const TC={linkedin:'var(--blue)',email:'var(--cyan)',call:'var(--green)',entretien:'var(--purple)',note:'var(--muted)'};
+    const logs=(c.activityLog||[]).slice().reverse();
+    body.innerHTML=`<div class="det-section"><div class="det-section-title">Notes personnelles</div>
+    <textarea class="notes-editable" id="det-notes" onblur="saveNotes(${c.id})">${c.notes||''}</textarea></div>
+    <div class="det-section"><div class="det-section-title">Journal d'activité</div>
+    <div class="activity-log">${logs.length?logs.map(l=>`<div class="alog-item"><div class="alog-date">${fmtDate(l.date)}</div><div class="alog-action">${l.action}</div>${l.type?`<div class="alog-type" style="background:${TC[l.type]||'var(--muted)'}22;color:${TC[l.type]||'var(--muted)'}">${l.type}</div>`:''}</div>`).join(''):'<div style="font-size:12px;color:var(--muted);padding:6px">Aucune activité</div>'}</div>
+    <div class="add-log-row">
+      <select id="log-type" style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 7px;color:var(--text);font-family:var(--font);font-size:11px;outline:none;"><option value="linkedin">LinkedIn</option><option value="email">Email</option><option value="call">Appel</option><option value="entretien">Entretien</option><option value="note">Note</option></select>
+      <input type="date" class="log-date-input" id="log-date" value="${todayStr()}" title="Date (passée ou présente)">
+      <input class="add-log-input" id="log-input" placeholder="Décrire l'action..." onkeydown="if(event.key==='Enter')addLog(${c.id})">
+      <button class="add-log-btn" onclick="addLog(${c.id})">+ Ajouter</button>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:3px">💡 Tu peux saisir une date passée pour logger rétroactivement</div>
+    </div>`;
+  }
+}
+
+function saveInterviewPrep(id){
+  const c=companies.find(x=>x.id===id);if(!c)return;
+  if(!c.interviewPrep)c.interviewPrep={pitch:'',questions:['','',''],keyFacts:'',interviewDate:''};
+  c.interviewPrep.interviewDate=document.getElementById('ip-date')?.value||'';
+  c.interviewPrep.pitch=document.getElementById('ip-pitch')?.value||'';
+  c.interviewPrep.questions=[0,1,2].map(i=>document.getElementById('ip-q'+i)?.value||'');
+  c.interviewPrep.keyFacts=document.getElementById('ip-facts')?.value||'';
+  saveData();toast('Préparation sauvegardée !');
+}
+function saveNotes(id){const c=companies.find(x=>x.id===id);if(!c)return;const el=document.getElementById('det-notes');if(el)c.notes=el.value;saveData();}
+function addLog(id){
+  const c=companies.find(x=>x.id===id);if(!c)return;
+  const action=document.getElementById('log-input').value.trim();
+  if(!action)return;
+  const type=document.getElementById('log-type').value;
+  const dp=document.getElementById('log-date');
+  const date=dp&&dp.value?dp.value:todayStr();
+  if(!c.activityLog)c.activityLog=[];
+  c.activityLog.push({date,action,type});
+  c.activityLog.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  saveData();toast('Activité enregistrée');renderDetBody(c);
+}
+function changeCompanyStatus(id,ns){
+  const c=companies.find(x=>x.id===id);if(!c)return;
+  c.status=ns;if(ns>=1&&!c.date)c.date=todayStr();
+  if(!c.activityLog)c.activityLog=[];
+  c.activityLog.push({date:todayStr(),action:'Statut → '+sl(ns),type:'note'});
+  c.activityLog.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  saveData();updateHeaderStats();renderDetBody(c);
+  document.getElementById('det-company-badges').querySelector('.sbadge').textContent=sl(ns);
+  document.getElementById('det-company-badges').querySelector('.sbadge').style.color=scol(ns);
+  document.getElementById('det-company-badges').querySelector('.sbadge').style.borderColor=scol(ns);
+  toast('Statut mis à jour');
+}
+function advanceStatus(id){
+  const c=companies.find(x=>x.id===id);
+  if(c&&c.status<4){c.status++;if(!c.date)c.date=todayStr();if(!c.activityLog)c.activityLog=[];c.activityLog.push({date:todayStr(),action:'→ '+sl(c.status),type:'note'});saveData();renderPipeline();}
+}
+function regressStatus(id){
+  const c=companies.find(x=>x.id===id);
+  if(c&&c.status>0){c.status--;if(!c.activityLog)c.activityLog=[];c.activityLog.push({date:todayStr(),action:'← '+sl(c.status),type:'note'});saveData();renderPipeline();}
+}
+function editCurrentCompany(){if(currentDetCompanyId)editCompany(currentDetCompanyId);}
+
+// ============================================================
+// ADD / EDIT COMPANY
+// ============================================================
+function openAddCompany(){
+  editingCompanyId=null;tempKeyPeople=[];tempSecondaryContacts=[];
+  document.getElementById('form-company-title').textContent='➕ Nouvelle entreprise';
+  document.getElementById('dup-warning').style.display='none';
+  ['fc-name','fc-website','fc-founded','fc-employees','fc-funding','fc-desc','fc-hook',
+   'fc-cname','fc-crole','fc-cemail','fc-clinkedin','fc-cphone','fc-notes','fc-next-action','fc-next-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('fc-sector').value='Fintech';document.getElementById('fc-stage').value='Scale-up';
+  document.getElementById('fc-status').value='0';document.getElementById('fc-priority').value='medium';
+  document.getElementById('fc-market').value='hidden';document.getElementById('fc-channel').value='linkedin';
+  document.getElementById('fc-date').value=todayStr();document.getElementById('fc-followup').value='';
+  document.getElementById('kp-list').innerHTML='';document.getElementById('sc-list').innerHTML='';
+  openOverlay('company-form-modal');
+}
+function editCompany(id){
+  const c=companies.find(x=>x.id===id);if(!c)return;
+  editingCompanyId=id;
+  tempKeyPeople=[...(c.keyPeople||[]).map(p=>({...p}))];
+  tempSecondaryContacts=[...(c.secondaryContacts||[]).map(p=>({...p}))];
+  document.getElementById('form-company-title').textContent='✏️ Modifier — '+c.name;
+  document.getElementById('dup-warning').style.display='none';
+  document.getElementById('fc-name').value=c.name||'';
+  document.getElementById('fc-website').value=c.website||'';
+  document.getElementById('fc-founded').value=c.founded||'';
+  document.getElementById('fc-employees').value=c.employees||'';
+  document.getElementById('fc-funding').value=c.funding||'';
+  document.getElementById('fc-desc').value=c.description||'';
+  document.getElementById('fc-hook').value=c.hook||'';
+  document.getElementById('fc-sector').value=c.sector||'Fintech';
+  document.getElementById('fc-stage').value=c.stage||'Scale-up';
+  document.getElementById('fc-market').value=c.marketType||'hidden';
+  document.getElementById('fc-status').value=String(c.status||0);
+  document.getElementById('fc-priority').value=c.priority||'medium';
+  document.getElementById('fc-channel').value=c.channel||'linkedin';
+  document.getElementById('fc-date').value=c.date||'';
+  document.getElementById('fc-followup').value=c.followUpDate||'';
+  document.getElementById('fc-next-action').value=c.nextAction||'';
+  document.getElementById('fc-next-date').value=c.nextActionDate||'';
+  document.getElementById('fc-notes').value=c.notes||'';
+  document.getElementById('fc-cname').value=c.myContact?.name||'';
+  document.getElementById('fc-crole').value=c.myContact?.role||'';
+  document.getElementById('fc-cemail').value=c.myContact?.email||'';
+  document.getElementById('fc-clinkedin').value=c.myContact?.linkedin||'';
+  document.getElementById('fc-cphone').value=c.myContact?.phone||'';
+  document.getElementById('kp-list').innerHTML='';tempKeyPeople.forEach((_,i)=>renderKPRow(i));
+  document.getElementById('sc-list').innerHTML='';tempSecondaryContacts.forEach((_,i)=>renderSCRow(i));
+  closeOverlay('company-detail-modal');openOverlay('company-form-modal');
+}
+
+function addKeyPerson(){tempKeyPeople.push({name:'',role:'',linkedin:'',email:'',phone:''});renderKPRow(tempKeyPeople.length-1);}
+function renderKPRow(i){
+  const p=tempKeyPeople[i]||{};
+  const row=document.createElement('div');row.id='kp-row-'+i;row.className='kp-row-grid';
+  const s='background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-family:var(--font);font-size:11px;outline:none;width:100%';
+  row.innerHTML=`
+    <input placeholder="Nom *" value="${p.name||''}" oninput="updateKP(${i},'name',this.value)" style="${s}">
+    <input placeholder="Rôle" value="${p.role||''}" oninput="updateKP(${i},'role',this.value)" style="${s}">
+    <input placeholder="LinkedIn" value="${p.linkedin||''}" oninput="updateKP(${i},'linkedin',this.value)" style="${s}">
+    <input placeholder="Email" value="${p.email||''}" oninput="updateKP(${i},'email',this.value)" style="${s}">
+    <input placeholder="Tél." value="${p.phone||''}" oninput="updateKP(${i},'phone',this.value)" style="${s}">
+    <button onclick="removeKP(${i})" style="width:26px;height:26px;border-radius:5px;background:var(--bg3);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:12px">✕</button>`;
+  document.getElementById('kp-list').appendChild(row);
+}
+function updateKP(i,f,v){if(tempKeyPeople[i])tempKeyPeople[i][f]=v;}
+function removeKP(i){tempKeyPeople.splice(i,1);document.getElementById('kp-list').innerHTML='';tempKeyPeople.forEach((_,j)=>renderKPRow(j));}
+
+function addSecondaryContact(){tempSecondaryContacts.push({name:'',role:'',email:'',linkedin:'',phone:''});renderSCRow(tempSecondaryContacts.length-1);}
+function renderSCRow(i){
+  const p=tempSecondaryContacts[i]||{};
+  const row=document.createElement('div');row.id='sc-row-'+i;row.className='kp-row-grid';
+  const s='background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-family:var(--font);font-size:11px;outline:none;width:100%';
+  row.innerHTML=`
+    <input placeholder="Nom *" value="${p.name||''}" oninput="updateSC(${i},'name',this.value)" style="${s}">
+    <input placeholder="Rôle" value="${p.role||''}" oninput="updateSC(${i},'role',this.value)" style="${s}">
+    <input placeholder="LinkedIn" value="${p.linkedin||''}" oninput="updateSC(${i},'linkedin',this.value)" style="${s}">
+    <input placeholder="Email" value="${p.email||''}" oninput="updateSC(${i},'email',this.value)" style="${s}">
+    <input placeholder="Tél." value="${p.phone||''}" oninput="updateSC(${i},'phone',this.value)" style="${s}">
+    <button onclick="removeSC(${i})" style="width:26px;height:26px;border-radius:5px;background:var(--bg3);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:12px">✕</button>`;
+  document.getElementById('sc-list').appendChild(row);
+}
+function updateSC(i,f,v){if(tempSecondaryContacts[i])tempSecondaryContacts[i][f]=v;}
+function removeSC(i){tempSecondaryContacts.splice(i,1);document.getElementById('sc-list').innerHTML='';tempSecondaryContacts.forEach((_,j)=>renderSCRow(j));}
+
+function saveCompany(){
+  const name=document.getElementById('fc-name').value.trim();if(!name)return;
+  const existing=editingCompanyId?companies.find(c=>c.id===editingCompanyId):null;
+  const company=mkCompany({
+    id:editingCompanyId||Date.now(),name,
+    website:document.getElementById('fc-website').value.trim(),
+    sector:document.getElementById('fc-sector').value,stage:document.getElementById('fc-stage').value,
+    founded:document.getElementById('fc-founded').value,employees:document.getElementById('fc-employees').value,
+    funding:document.getElementById('fc-funding').value,description:document.getElementById('fc-desc').value,
+    hook:document.getElementById('fc-hook').value.trim(),
+    marketType:document.getElementById('fc-market').value,
+    inbox:existing?.inbox||false,
+    keyPeople:[...tempKeyPeople.filter(p=>p.name.trim())],
+    secondaryContacts:[...tempSecondaryContacts.filter(p=>p.name.trim())],
+    myContact:{
+      name:document.getElementById('fc-cname').value.trim(),
+      role:document.getElementById('fc-crole').value.trim(),
+      email:document.getElementById('fc-cemail').value.trim(),
+      linkedin:document.getElementById('fc-clinkedin').value.trim(),
+      phone:document.getElementById('fc-cphone').value.trim()
+    },
+    status:parseInt(document.getElementById('fc-status').value),
+    priority:document.getElementById('fc-priority').value,
+    channel:document.getElementById('fc-channel').value,
+    date:document.getElementById('fc-date').value,
+    followUpDate:document.getElementById('fc-followup').value,
+    nextAction:document.getElementById('fc-next-action').value.trim(),
+    nextActionDate:document.getElementById('fc-next-date').value,
+    notes:document.getElementById('fc-notes').value,
+    activityLog:existing?.activityLog||[],
+    interviewPrep:existing?.interviewPrep||{pitch:'',questions:['','',''],keyFacts:'',interviewDate:''},
+    createdAt:existing?.createdAt||new Date().toISOString()
+  });
+  if(!editingCompanyId&&company.status>=1)company.activityLog.push({date:company.date||todayStr(),action:'Ajouté au CRM',type:'note'});
+  if(editingCompanyId){const i=companies.findIndex(c=>c.id===editingCompanyId);if(i!==-1)companies[i]=company;}else companies.push(company);
+  saveData();updateHeaderStats();closeOverlay('company-form-modal');toast(editingCompanyId?'Modifiée !':'Ajoutée !');
+  const active=document.querySelector('.view.active');
+  if(active?.id==='view-pipeline')renderPipeline();else if(active?.id==='view-entreprises')renderEntreprises();else renderDashboard();
+}
+function deleteCompany(id){if(!confirm('Supprimer ?'))return;companies=companies.filter(c=>c.id!==id);saveData();renderPipeline();updateHeaderStats();toast('Supprimée');}
+
+// QUICK ADD → Bac à sable
+function openQuickAdd(){
+  document.getElementById('qa-name').value='';document.getElementById('qa-hook').value='';
+  document.getElementById('qa-sector').value='Fintech';document.getElementById('qa-priority').value='medium';
+  const w=document.getElementById('dup-warning-quick');if(w)w.style.display='none';
+  openOverlay('quick-add-modal');
+}
+function saveQuickAdd(){
+  const name=document.getElementById('qa-name').value.trim();if(!name)return;
+  const c=mkCompany({name,sector:document.getElementById('qa-sector').value,priority:document.getElementById('qa-priority').value,hook:document.getElementById('qa-hook').value.trim(),marketType:'hidden',inbox:true});
+  companies.push(c);saveData();closeOverlay('quick-add-modal');
+  toast('Ajoutée au Bac à sable !');updateHeaderStats();
+  const active=document.querySelector('.view.active');
+  if(active?.id==='view-pipeline')renderPipeline();else renderDashboard();
+}
+
+// CONTACTS
+function openAddContact(){editingContactId=null;document.getElementById('form-contact-title').textContent='➕ Nouveau contact';['fct-name','fct-role','fct-company','fct-email','fct-linkedin','fct-phone','fct-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('fct-status').value='à contacter';document.getElementById('fct-followup').value='';openOverlay('contact-form-modal');}
+function editContact(id){const c=contacts.find(x=>x.id===id);if(!c)return;editingContactId=id;document.getElementById('form-contact-title').textContent='✏️ Modifier — '+c.name;document.getElementById('fct-name').value=c.name||'';document.getElementById('fct-role').value=c.role||'';document.getElementById('fct-company').value=c.companyName||'';document.getElementById('fct-email').value=c.email||'';document.getElementById('fct-linkedin').value=c.linkedin||'';document.getElementById('fct-phone').value=c.phone||'';document.getElementById('fct-status').value=c.status||'à contacter';document.getElementById('fct-followup').value=c.followUpDate||'';document.getElementById('fct-notes').value=c.notes||'';openOverlay('contact-form-modal');}
+function saveContact(){const name=document.getElementById('fct-name').value.trim();if(!name)return;const contact={id:editingContactId||Date.now(),name,role:document.getElementById('fct-role').value.trim(),companyName:document.getElementById('fct-company').value.trim(),email:document.getElementById('fct-email').value.trim(),linkedin:document.getElementById('fct-linkedin').value.trim(),phone:document.getElementById('fct-phone').value.trim(),status:document.getElementById('fct-status').value,followUpDate:document.getElementById('fct-followup').value,notes:document.getElementById('fct-notes').value};if(editingContactId){const i=contacts.findIndex(c=>c.id===editingContactId);if(i!==-1)contacts[i]=contact;}else contacts.push(contact);saveData();closeOverlay('contact-form-modal');renderContacts();toast(editingContactId?'Contact modifié':'Contact ajouté !');}
+function deleteContact(id){if(!confirm('Supprimer ?'))return;contacts=contacts.filter(c=>c.id!==id);saveData();renderContacts();toast('Supprimé');}
+
+// OVERLAY CLOSE
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+// Fermer le panneau recherche en cliquant en dehors
+document.addEventListener('click',e=>{
+  const panel=document.getElementById('search-panel');
+  const input=document.getElementById('search-input');
+  if(panel&&input&&!panel.contains(e.target)&&e.target!==input){
+    panel.style.display='none';
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+loadData();loadTemplates();renderDeadline();renderDashboard();
+renderTemplateTabs();renderTemplateContent();
+document.getElementById('weekly-checklist').innerHTML=CHECKLIST_ITEMS.map((item,i)=>`<div class="cl-item" onclick="toggleCheck(${i})"><div class="cl-box ${checkedItems.has(i)?'done':''}"></div><span class="cl-txt ${checkedItems.has(i)?'done':''}">${item.text}</span><span class="cl-tag" style="background:${item.tc}22;color:${item.tc};border:1px solid ${item.tc}44">${item.tag}</span></div>`).join('');
+</script>
+</body>
+</html>
